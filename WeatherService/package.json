@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch",
-    "start": "node ./dist/service.js"
+    "start": "npm run build && node ./dist/service.js"
   },
   "author": "",
   "license": "ISC",
