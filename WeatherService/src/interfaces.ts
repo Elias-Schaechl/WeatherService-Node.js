@@ -2,7 +2,7 @@ import { Confighandler } from './config/config';
 
 export interface IWeatherReciever{
     setIntervall(intervall: number): boolean
-    setRecieveMessage(target: (weather: Weather) => boolean):boolean
+    setRecieveFunction(target: (weather: Weather) => boolean):boolean
     setCycleActive(status: boolean):boolean
     triggerSending():boolean
     

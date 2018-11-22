@@ -5,19 +5,19 @@ export class WeatherReciever implements IWeatherReciever{
     private intervall: number
     private cycleActive: boolean = false
 
-    sendWeather: (weather: Weather) => boolean
+    private sendWeather: (weather: Weather) => boolean
 
-    private baseUrl: string = ""
-    private query: string = ""
+    private baseUrl: string = "https://api.openweathermap.org/data/"
+    private query: string = "/2.5/weather?q=Leonding,at&appid=5cb2b2fa61fa541e7b13255fc29d5c61"
     private cycle: number = 0
-    private lastWeather: Weather
+    private lastWeather: Weather = new Weather(0,0,0)
 
 
     constructor(){
         this.intervall = -1
         this.sendWeather = this.dummyFunc
 
-        this.startCycle
+        
     }
     
     /**
@@ -28,7 +28,9 @@ export class WeatherReciever implements IWeatherReciever{
     setInterval(intervall: number): boolean {
         if(intervall == null) return false
         if(intervall <= 0) return false
+        if(this.cycleActive)this.stopCycle()
         this.intervall = intervall
+        this.startCycle()
         return true
     }
 
@@ -44,7 +46,7 @@ export class WeatherReciever implements IWeatherReciever{
      * Sets the funtion which is to bee called when new weather arrives
      * @param target The function which is to be called
      */
-    setRecieveMessage(target: (weather: Weather) => boolean): boolean {
+    setRecieveFunction(target: (weather: Weather) => boolean): boolean {
         if(target == null) return false
         this.sendWeather = target
         return true

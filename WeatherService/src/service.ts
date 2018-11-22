@@ -1,5 +1,5 @@
 import {Confighandler} from './config/config'
-
+import {WeatherReciever} from './weather/weatherreciever'
 const greeting: string = "Hello World!"
 console.log(greeting)
 let c1 = new Confighandler()
@@ -12,3 +12,9 @@ function newWeather(weather: Weather):boolean{
 }
 
 let wr = new WeatherReciever()
+wr.setRecieveFunction(GetWeather)
+
+function GetWeather(weather: Weather):boolean{
+    weather
+    return true;
+}
