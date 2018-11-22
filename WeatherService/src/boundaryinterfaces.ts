@@ -1,7 +1,8 @@
 import { Confighandler } from './config/config';
+import { Weather } from './entities';
 
 export interface IWeatherReciever{
-    setIntervall(intervall: number): boolean
+    setCycleDuration(interval: number): boolean
     setRecieveFunction(target: (weather: Weather) => boolean):boolean
     setCycleActive(status: boolean):boolean
     triggerSending():boolean
@@ -9,12 +10,12 @@ export interface IWeatherReciever{
 }
 
 interface IForecastReciever{
-    setIntervall(intervall: number): boolean
+    setCycleDuration(interval: number): boolean
 
 }
 
 interface IMQTTGateway{
-    setIntervall(intervall: number): boolean
+    setCycleDuration(interval: number): boolean
     send(content:string, topic:string, qos:number):void
     
 }

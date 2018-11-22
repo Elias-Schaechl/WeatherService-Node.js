@@ -1,4 +1,4 @@
-class Weather{
+export class Weather{
         
     readonly temp: number
     readonly pressure: number

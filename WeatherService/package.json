@@ -10,7 +10,9 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+    "eslint": "^5.9.0"
+  },
   "devDependencies": {
     "typescript": "^3.1.4"
   }
