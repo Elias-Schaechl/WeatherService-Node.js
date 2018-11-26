@@ -1,8 +1,7 @@
-import { IWeatherReciever } from "../boundaryinterfaces"
-import { Weather } from "../entities";
+import { IWeatherReciever } from "../interfaces/boundaryinterfaces"
+import { Weather } from "../entities"
 
-import { HTTP } from 
-
+import axios from 'axios';
 
 
 export class WeatherReciever implements IWeatherReciever{
@@ -15,8 +14,7 @@ export class WeatherReciever implements IWeatherReciever{
     private baseUrl: string = "https://api.openweathermap.org/data/"
     private query: string = "/2.5/weather?q=Leonding,at&appid=5cb2b2fa61fa541e7b13255fc29d5c61"
     private cycle: number = 0
-    private lastWeather: Weather = new Weather(0,0,0)
-    http: Http
+    private lastWeather: Weather = new Weather(0,0,0,0,0)
 
 
     constructor(){
@@ -118,12 +116,17 @@ export class WeatherReciever implements IWeatherReciever{
         }
         var weather = this.formatWeather(weatherString)
         this.sendWeather(weather)
-        throw new Error("Method not implemented.")
+        return true
     }
 
     private formatWeather(weatherString: string):Weather{
         console.info("formatWeather ran...")
-        throw new Error("Method not implemented.")
+        let weatherjson: WeatherJson = JSON.parse(weatherString)
+        return new Weather(weatherjson.main.temp, 
+                           weatherjson.main.pressure, 
+                           weatherjson.main.humidity, 
+                           weatherjson.wind.speed, 
+                           weatherjson.wind.deg)
     }
 
     private checkWeather(){
@@ -138,36 +141,16 @@ export class WeatherReciever implements IWeatherReciever{
     private sendHTTPRequest():any{
         console.info("sendHTTPRequest ran...")
         var res: string = ""
-        return {"coord":{"lon":-0.13,"lat":51.51},"weather":[{"id":300,"main":"Drizzle","description":"light intensity drizzle","icon":"09d"}],"base":"stations","main":{"temp":280.32,"pressure":1012,"humidity":81,"temp_min":279.15,"temp_max":281.15},"visibility":10000,"wind":{"speed":4.1,"deg":80},"clouds":{"all":90},"dt":1485789600,"sys":{"type":1,"id":5091,"message":0.0103,"country":"GB","sunrise":1485762037,"sunset":1485794875},"id":2643743,"name":"London","cod":200}
-        try{/*
-            $.getJSON("http://localhost:49306/CustomerManagement",
-            cs => {
-                    this.custs = <AdventureWorksEntities.ICustomer[]>cs;
-            });
-            */
-            /*
-            http:Http
-            this.http.get(this.getUrl)
-                .map((res: Response) => {
-                    res.json();
-            })
-            */
-            /*
-            fetch(this.getUrl()).then( response =>{
-                if(!response.ok){
-                    throw Error(response.statusText)
-                }
-                response.text().then(r => {
-                    res = r
-                })
-            })
-            */
-        }
-        catch(err){
-            throw err
-        }
-        return res
-
+        axios.get(this.getUrl())
+          .then(function (response) {
+            console.debug("cc")
+            console.debug(response.data)
+            return response.data
+          })
+          .catch(function (error) {
+            console.error(error);
+          });
+        console.debug(this.getUrl())    
     }
 
     private dummyFunc(w: Weather): boolean{

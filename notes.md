@@ -12,7 +12,9 @@
 | 01.11.2018 | config handling    | 3        |
 
 
-### Some ideas:
+### Some tec:S
 
 - `nodemon` for typescript 
+- `Axeos` Http client
+- `Json to ts` json to interface converter
 

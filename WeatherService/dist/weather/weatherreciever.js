@@ -1,13 +1,17 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const entities_1 = require("../entities");
+const axios_1 = __importDefault(require("axios"));
 class WeatherReciever {
     constructor() {
         this.cycleActive = false;
         this.baseUrl = "https://api.openweathermap.org/data/";
         this.query = "/2.5/weather?q=Leonding,at&appid=5cb2b2fa61fa541e7b13255fc29d5c61";
         this.cycle = 0;
-        this.lastWeather = new entities_1.Weather(0, 0, 0);
+        this.lastWeather = new entities_1.Weather(0, 0, 0, 0, 0);
         this.cycleDuration = -1;
         this.sendWeather = this.dummyFunc;
     }
@@ -102,11 +106,12 @@ class WeatherReciever {
         }
         var weather = this.formatWeather(weatherString);
         this.sendWeather(weather);
-        throw new Error("Method not implemented.");
+        return true;
     }
     formatWeather(weatherString) {
         console.info("formatWeather ran...");
-        throw new Error("Method not implemented.");
+        let weatherjson = JSON.parse(weatherString);
+        return new entities_1.Weather(weatherjson.main.temp, weatherjson.main.pressure, weatherjson.main.humidity, weatherjson.wind.speed, weatherjson.wind.deg);
     }
     checkWeather() {
         console.info("checkWeather ran...");
@@ -118,20 +123,16 @@ class WeatherReciever {
     sendHTTPRequest() {
         console.info("sendHTTPRequest ran...");
         var res = "";
-        try {
-            fetch(this.getUrl()).then(response => {
-                if (!response.ok) {
-                    throw Error(response.statusText);
-                }
-                response.text().then(r => {
-                    res = r;
-                });
-            });
-        }
-        catch (err) {
-            throw err;
-        }
-        return res;
+        axios_1.default.get(this.getUrl())
+            .then(function (response) {
+            console.debug("cc");
+            console.debug(response.data);
+            return response.data;
+        })
+            .catch(function (error) {
+            console.error(error);
+        });
+        console.debug(this.getUrl());
     }
     dummyFunc(w) {
         console.info("dummyFunc ran...");

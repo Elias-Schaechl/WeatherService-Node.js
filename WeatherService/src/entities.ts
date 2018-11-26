@@ -1,21 +1,25 @@
 export class Weather{
-        
-    readonly temp: number
-    readonly pressure: number
-    readonly humidity: number
 
+    constructor(readonly temp: number, 
+                readonly pressure: number, 
+                readonly humidity: number, 
+                readonly windspeed: number, 
+                readonly winddir:number,){
 
-    constructor(temp: number, pressure: number, humidity: number){
         this.temp = temp
         this.pressure = pressure
         this.humidity = humidity
+        this.windspeed = windspeed
+        this.winddir = winddir
+        
     }
+}
 
-    /**
-     * ToString
-     * @returns A string representing the Object
-     */
-    public ToString(): string {
-        return "Weather: " + this.humidity + ", " + this.pressure
-    }
+export class Unit{
+
+    readonly temp: string = "°C"
+    readonly pressure: string = "%"
+    readonly humidity: string = "hPa"
+    readonly windspeed: string = "m/s"
+    readonly winddir: string = "°"
 }

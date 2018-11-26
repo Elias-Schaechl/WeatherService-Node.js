@@ -10,11 +10,13 @@ c1.loadConfig()
 
 let wr = new WeatherReciever()
 wr.setRecieveFunction(GetWeather)
-wr.setCycleDuration(5)
+wr.setCycleDuration(5000)
 wr.setCycleActive
 
 function GetWeather(weather: Weather):boolean{
-    weather
-    console.log("Weather data arrived ${weather.toString()}")
+    console.log(`New Weather Data arrived ${JSON.stringify(weather)}`)
+
     return true;
 }
+
+console.log("Hey I'm working!")

@@ -1,5 +1,5 @@
-import { Confighandler } from './config/config';
-import { Weather } from './entities';
+import { Confighandler } from '../config/config';
+import { Weather } from '../entities';
 
 export interface IWeatherReciever{
     setCycleDuration(interval: number): boolean
