@@ -5,11 +5,11 @@ const weatherreciever_1 = require("./weather/weatherreciever");
 const greeting = "Hello World!";
 console.log(greeting);
 let c1 = new config_1.Confighandler();
-c1.loadConfig("hoho");
+//c1.loadConfig("hoho")
 c1.loadConfig();
 let wr = new weatherreciever_1.WeatherReciever();
 wr.setRecieveFunction(GetWeather);
-wr.setCycleDuration(5000);
+wr.setCycleDuration(10000);
 wr.setCycleActive;
 function GetWeather(weather) {
     console.log(`New Weather Data arrived ${JSON.stringify(weather)}`);

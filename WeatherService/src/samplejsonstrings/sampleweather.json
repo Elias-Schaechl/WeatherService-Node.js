@@ -1,0 +1,40 @@
+{
+    "coord": {
+        "lon": 14.25,
+        "lat": 48.28
+    },
+    "weather": [{
+        "id": 803,
+        "main": "Clouds",
+        "description": "broken clouds",
+        "icon": "04d"
+    }],
+    "base": "stations",
+    "main": {
+        "temp": 275.15,
+        "pressure": 1016,
+        "humidity": 96,
+        "temp_min": 275.15,
+        "temp_max": 275.15
+    },
+    "visibility": 10000,
+    "wind": {
+        "speed": 2.1,
+        "deg": 320
+    },
+    "clouds": {
+        "all": 75
+    },
+    "dt": 1543312200,
+    "sys": {
+        "type": 1,
+        "id": 5932,
+        "message": 0.0023,
+        "country": "AT",
+        "sunrise": 1543300073,
+        "sunset": 1543331592
+    },
+    "id": 7872055,
+    "name": "Leonding",
+    "cod": 200
+}

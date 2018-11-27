@@ -110,23 +110,30 @@ export class WeatherReciever implements IWeatherReciever{
 
     private getWeather(): boolean{
         console.info("getWeather ran...")
-        var weatherString = this.sendHTTPRequest()
-        if(weatherString == ""){
+        this.sendHTTPRequest()
+        if(true){
+            console.debug("weatherString is empty")
             return false
-        }
-        var weather = this.formatWeather(weatherString)
-        this.sendWeather(weather)
+        } 
         return true
     }
 
-    private formatWeather(weatherString: string):Weather{
+    private onWeatherRecieved(weatherString: string){
+        console.info("onWeatherRecieved ran...")
+        console.debug(weatherString)
+        let weatherJson: WeatherJson = JSON.parse(weatherString)
+        let weather = this.formatWeather(weatherJson)
+        console.debug(`Result weather: \n${JSON.stringify(weather)}`)
+        this.sendWeather(weather)
+    }
+
+    private formatWeather(weatherJson: WeatherJson):Weather{
         console.info("formatWeather ran...")
-        let weatherjson: WeatherJson = JSON.parse(weatherString)
-        return new Weather(weatherjson.main.temp, 
-                           weatherjson.main.pressure, 
-                           weatherjson.main.humidity, 
-                           weatherjson.wind.speed, 
-                           weatherjson.wind.deg)
+        return new Weather(weatherJson.main.temp, 
+                           weatherJson.main.pressure, 
+                           weatherJson.main.humidity, 
+                           weatherJson.wind.speed, 
+                           weatherJson.wind.deg)
     }
 
     private checkWeather(){
@@ -138,19 +145,22 @@ export class WeatherReciever implements IWeatherReciever{
      * Sends a HTTP requesr to weather api
      * @returns returns the response as a string
      */
-    private sendHTTPRequest():any{
+    private sendHTTPRequest():string{
         console.info("sendHTTPRequest ran...")
-        var res: string = ""
-        axios.get(this.getUrl())
+        let res: string = ""
+        let url: string = this.getUrl()
+        const self = this
+        axios.get(url)
           .then(function (response) {
-            console.debug("cc")
-            console.debug(response.data)
-            return response.data
+            //console.debug("cc")
+            //console.debug(response.data)
+            self.onWeatherRecieved(response.data)
           })
           .catch(function (error) {
             console.error(error);
           });
-        console.debug(this.getUrl())    
+        console.debug(url) 
+        return ""
     }
 
     private dummyFunc(w: Weather): boolean{

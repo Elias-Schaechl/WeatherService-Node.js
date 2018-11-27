@@ -100,18 +100,24 @@ class WeatherReciever {
     }
     getWeather() {
         console.info("getWeather ran...");
-        var weatherString = this.sendHTTPRequest();
-        if (weatherString == "") {
+        this.sendHTTPRequest();
+        if (true) {
+            console.debug("weatherString is empty");
             return false;
         }
-        var weather = this.formatWeather(weatherString);
-        this.sendWeather(weather);
         return true;
     }
-    formatWeather(weatherString) {
+    onWeatherRecieved(weatherString) {
+        console.info("onWeatherRecieved ran...");
+        console.debug(weatherString);
+        let weatherJson = JSON.parse(weatherString);
+        let weather = this.formatWeather(weatherJson);
+        console.debug(`Result weather: \n${JSON.stringify(weather)}`);
+        this.sendWeather(weather);
+    }
+    formatWeather(weatherJson) {
         console.info("formatWeather ran...");
-        let weatherjson = JSON.parse(weatherString);
-        return new entities_1.Weather(weatherjson.main.temp, weatherjson.main.pressure, weatherjson.main.humidity, weatherjson.wind.speed, weatherjson.wind.deg);
+        return new entities_1.Weather(weatherJson.main.temp, weatherJson.main.pressure, weatherJson.main.humidity, weatherJson.wind.speed, weatherJson.wind.deg);
     }
     checkWeather() {
         console.info("checkWeather ran...");
@@ -122,17 +128,20 @@ class WeatherReciever {
      */
     sendHTTPRequest() {
         console.info("sendHTTPRequest ran...");
-        var res = "";
-        axios_1.default.get(this.getUrl())
+        let res = "";
+        let url = this.getUrl();
+        const self = this;
+        axios_1.default.get(url)
             .then(function (response) {
-            console.debug("cc");
-            console.debug(response.data);
-            return response.data;
+            //console.debug("cc")
+            //console.debug(response.data)
+            self.onWeatherRecieved(response.data);
         })
             .catch(function (error) {
             console.error(error);
         });
-        console.debug(this.getUrl());
+        console.debug(url);
+        return "";
     }
     dummyFunc(w) {
         console.info("dummyFunc ran...");
