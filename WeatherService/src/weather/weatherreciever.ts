@@ -14,7 +14,7 @@ export class WeatherReciever implements IWeatherReciever{
     private baseUrl: string = "https://api.openweathermap.org/data/"
     private query: string = "/2.5/weather?q=Leonding,at&appid=5cb2b2fa61fa541e7b13255fc29d5c61"
     private cycle: number = 0
-    private lastWeather: Weather = new Weather(0,0,0,0,0)
+    private lastWeather: Weather = new Weather(0,0,0,0,0,0)
 
 
     constructor(){
@@ -111,25 +111,28 @@ export class WeatherReciever implements IWeatherReciever{
     private getWeather(): boolean{
         console.info("getWeather ran...")
         this.sendHTTPRequest()
-        if(true){
-            console.debug("weatherString is empty")
-            return false
-        } 
         return true
     }
 
-    private onWeatherRecieved(weatherString: string){
+    private onWeatherRecieved(weatherJson: WeatherJson){
         console.info("onWeatherRecieved ran...")
-        console.debug(weatherString)
-        let weatherJson: WeatherJson = JSON.parse(weatherString)
+        //console.debug(weatherString)
         let weather = this.formatWeather(weatherJson)
-        console.debug(`Result weather: \n${JSON.stringify(weather)}`)
-        this.sendWeather(weather)
+        //console.debug(`Result weather: \n${JSON.stringify(weather)}`)
+        if(this.lastWeather.Equals(weather)){
+            console.info("No change in weather!!")
+            return
+        }
+        else{
+            this.lastWeather = weather
+            this.sendWeather(weather)
+        }
     }
 
     private formatWeather(weatherJson: WeatherJson):Weather{
         console.info("formatWeather ran...")
-        return new Weather(weatherJson.main.temp, 
+        return new Weather(Date.now(),
+                           Math.round(weatherJson.main.temp - 273.15), 
                            weatherJson.main.pressure, 
                            weatherJson.main.humidity, 
                            weatherJson.wind.speed, 
@@ -154,6 +157,7 @@ export class WeatherReciever implements IWeatherReciever{
           .then(function (response) {
             //console.debug("cc")
             //console.debug(response.data)
+            //let waetherString: string = JSON.stringify(response.data)
             self.onWeatherRecieved(response.data)
           })
           .catch(function (error) {
