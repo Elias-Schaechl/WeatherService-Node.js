@@ -1,3 +1,4 @@
+import { MqttClient } from './mqtt/mqttclient';
 import {Confighandler} from './config/config'
 import {WeatherReciever} from './weather/weatherreciever'
 import { Weather } from './entities';
@@ -18,5 +19,7 @@ function GetWeather(weather: Weather):boolean{
 
     return true;
 }
+
+let mqttClient = new MqttClient(); 
 
 console.log("Hey I'm working!")

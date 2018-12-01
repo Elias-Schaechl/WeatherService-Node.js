@@ -13,9 +13,12 @@
   "dependencies": {
     "axios": "^0.18.0",
     "eslint": "^5.9.0",
+    "mqtt": "^2.18.8",
+    "paho-mqtt": "^1.1.0",
     "typed-rest-client": "^1.0.11"
   },
   "devDependencies": {
+    "@types/node": "^10.12.11",
     "typescript": "^3.1.4"
   }
 }

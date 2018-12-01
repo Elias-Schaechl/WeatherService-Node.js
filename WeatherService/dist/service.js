@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const mqttclient_1 = require("./mqtt/mqttclient");
 const config_1 = require("./config/config");
 const weatherreciever_1 = require("./weather/weatherreciever");
 const greeting = "Hello World!";
@@ -15,5 +16,6 @@ function GetWeather(weather) {
     console.log(`New Weather Data arrived ${JSON.stringify(weather)}`);
     return true;
 }
+let mqttClient = new mqttclient_1.MqttClient();
 console.log("Hey I'm working!");
 //# sourceMappingURL=service.js.map

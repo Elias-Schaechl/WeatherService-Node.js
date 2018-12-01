@@ -12,9 +12,19 @@
 | 01.11.2018 | config handling    | 3        |
 
 
-### Some tec:S
+### Some tec:
 
 - `nodemon` for typescript 
 - `Axeos` Http client
 - `Json to ts` json to interface converter
 
+### Issues on the way
+
+-  Error while implementing mqtt client
+   Solved ([MQTT.js](https://www.npmjs.com/package/mqtt#usage-with-typescript)):
+   -  Setting tsconfig.json:
+      `"compilerOptions" : {"moduleResolution" : "node"}`
+   -  Including TypeScript definitions for node
+      `install --save-dev @types/node`
+
+-  
