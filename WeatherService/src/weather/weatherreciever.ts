@@ -1,7 +1,6 @@
 import { IWeatherReciever } from "../interfaces/boundaryinterfaces"
 import { Weather } from "../entities"
-
-import axios from 'axios';
+import axios from 'axios'
 
 
 export class WeatherReciever implements IWeatherReciever{
@@ -13,7 +12,7 @@ export class WeatherReciever implements IWeatherReciever{
 
     private baseUrl: string = "https://api.openweathermap.org/data/"
     private query: string = "/2.5/weather?q=Leonding,at&appid=5cb2b2fa61fa541e7b13255fc29d5c61"
-    private cycle: number = 0
+    private cycle =  setInterval(() => { this.dummyFunc }, 0)
     private lastWeather: Weather = new Weather(0,0,0,0,0,0)
 
 

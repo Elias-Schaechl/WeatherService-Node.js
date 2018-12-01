@@ -10,7 +10,7 @@ class WeatherReciever {
         this.cycleActive = false;
         this.baseUrl = "https://api.openweathermap.org/data/";
         this.query = "/2.5/weather?q=Leonding,at&appid=5cb2b2fa61fa541e7b13255fc29d5c61";
-        this.cycle = 0;
+        this.cycle = setInterval(() => { this.dummyFunc; }, 0);
         this.lastWeather = new entities_1.Weather(0, 0, 0, 0, 0, 0);
         this.cycleDuration = -1;
         this.sendWeather = this.dummyFunc;
