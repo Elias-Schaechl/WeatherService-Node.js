@@ -41,7 +41,7 @@ export class WeatherReciever implements IWeatherReciever{
      * @returns If the action was successful
      */
     triggerSending(): boolean {
-        console.info("triggerSending ran...")
+        //console.info("triggerSending ran...")
         throw new Error("Method not implemented.")
     }
 
@@ -50,7 +50,7 @@ export class WeatherReciever implements IWeatherReciever{
      * @param target The function which is to be called
      */
     setRecieveFunction(target: (weather: Weather) => boolean): boolean {
-        console.info("setRecieveFunction ran...")
+        //console.info("setRecieveFunction ran...")
         if(target == null) return false
         this.sendWeather = target
         return true
@@ -61,7 +61,7 @@ export class WeatherReciever implements IWeatherReciever{
      * @param status Which action is to bee performed
      */
     setCycleActive(status: boolean): boolean {
-        console.info("setCycleActive ran...")
+        //console.info("setCycleActive ran...")
         if(this.cycleActive == status) return false
         if(status){
             this.startCycle()
@@ -84,7 +84,7 @@ export class WeatherReciever implements IWeatherReciever{
         this.cycle = setInterval(() => { this.getWeather() }, this.cycleDuration)
 
         this.cycleActive = true
-        console.info("startCycle ran...")
+        //console.info("startCycle ran...")
         return true
     }
 
@@ -92,7 +92,7 @@ export class WeatherReciever implements IWeatherReciever{
      * Stop cycle
      */
     private stopCycle():boolean{
-        console.info("stopCycle ran...")
+        //console.info("stopCycle ran...")
         clearTimeout(this.cycle)
         return true
     }
@@ -102,19 +102,19 @@ export class WeatherReciever implements IWeatherReciever{
      * @returns Url
      */
     private getUrl(): string{
-        console.info("getUrl ran...")
+        //console.info("getUrl ran...")
         const url =  this.baseUrl + this.query
         return url
     }
 
     private getWeather(): boolean{
-        console.info("getWeather ran...")
+        //console.info("getWeather ran...")
         this.sendHTTPRequest()
         return true
     }
 
     private onWeatherRecieved(weatherJson: WeatherJson){
-        console.info("onWeatherRecieved ran...")
+        //console.info("onWeatherRecieved ran...")
         //console.debug(weatherString)
         let weather = this.formatWeather(weatherJson)
         //console.debug(`Result weather: \n${JSON.stringify(weather)}`)
@@ -129,7 +129,7 @@ export class WeatherReciever implements IWeatherReciever{
     }
 
     private formatWeather(weatherJson: WeatherJson):Weather{
-        console.info("formatWeather ran...")
+        //console.info("formatWeather ran...")
         return new Weather(Date.now(),
                            Math.round(weatherJson.main.temp - 273.15), 
                            weatherJson.main.pressure, 
@@ -139,7 +139,7 @@ export class WeatherReciever implements IWeatherReciever{
     }
 
     private checkWeather(){
-        console.info("checkWeather ran...")
+        //console.info("checkWeather ran...")
 
     }
 
@@ -148,7 +148,7 @@ export class WeatherReciever implements IWeatherReciever{
      * @returns returns the response as a string
      */
     private sendHTTPRequest():string{
-        console.info("sendHTTPRequest ran...")
+        //console.info("sendHTTPRequest ran...")
         let res: string = ""
         let url: string = this.getUrl()
         const self = this
@@ -167,7 +167,7 @@ export class WeatherReciever implements IWeatherReciever{
     }
 
     private dummyFunc(w: Weather): boolean{
-        console.info("dummyFunc ran...")
+        //console.info("dummyFunc ran...")
         return false
     }
 }

@@ -17,5 +17,6 @@ function GetWeather(weather) {
     return true;
 }
 let mqttClient = new mqttclient_1.MqttClient();
+mqttClient.send("htlleonding", "test some ppps");
 console.log("Hey I'm working!");
 //# sourceMappingURL=service.js.map

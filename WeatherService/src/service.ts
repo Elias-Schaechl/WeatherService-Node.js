@@ -21,5 +21,7 @@ function GetWeather(weather: Weather):boolean{
 }
 
 let mqttClient = new MqttClient(); 
+mqttClient.send("htlleonding", "test some ppps")
+
 
 console.log("Hey I'm working!")

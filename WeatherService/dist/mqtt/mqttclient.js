@@ -8,11 +8,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mqtt = __importStar(require("mqtt"));
-const url = "";
-const port = "";
 class MqttClient {
     constructor() {
-        this.client = mqtt.connect(url);
+        this.url = "vm61.htl-leonding.ac.at";
+        this.port = "1883";
+        this.client = mqtt.connect(`${this.url}:${this.port}`);
         const self = this;
         this.client.on('connect', function () {
             self.client.subscribe('htlleonding/#', function (err) {
@@ -26,6 +26,9 @@ class MqttClient {
             console.log(message.toString());
             self.client.end();
         });
+    }
+    send(topic, message) {
+        this.client.publish(topic, message);
     }
 }
 exports.MqttClient = MqttClient;

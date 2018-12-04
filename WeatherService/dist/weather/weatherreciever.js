@@ -37,7 +37,7 @@ class WeatherReciever {
      * @returns If the action was successful
      */
     triggerSending() {
-        console.info("triggerSending ran...");
+        //console.info("triggerSending ran...")
         throw new Error("Method not implemented.");
     }
     /**
@@ -45,7 +45,7 @@ class WeatherReciever {
      * @param target The function which is to be called
      */
     setRecieveFunction(target) {
-        console.info("setRecieveFunction ran...");
+        //console.info("setRecieveFunction ran...")
         if (target == null)
             return false;
         this.sendWeather = target;
@@ -56,7 +56,7 @@ class WeatherReciever {
      * @param status Which action is to bee performed
      */
     setCycleActive(status) {
-        console.info("setCycleActive ran...");
+        //console.info("setCycleActive ran...")
         if (this.cycleActive == status)
             return false;
         if (status) {
@@ -78,14 +78,14 @@ class WeatherReciever {
         }
         this.cycle = setInterval(() => { this.getWeather(); }, this.cycleDuration);
         this.cycleActive = true;
-        console.info("startCycle ran...");
+        //console.info("startCycle ran...")
         return true;
     }
     /**
      * Stop cycle
      */
     stopCycle() {
-        console.info("stopCycle ran...");
+        //console.info("stopCycle ran...")
         clearTimeout(this.cycle);
         return true;
     }
@@ -94,17 +94,17 @@ class WeatherReciever {
      * @returns Url
      */
     getUrl() {
-        console.info("getUrl ran...");
+        //console.info("getUrl ran...")
         const url = this.baseUrl + this.query;
         return url;
     }
     getWeather() {
-        console.info("getWeather ran...");
+        //console.info("getWeather ran...")
         this.sendHTTPRequest();
         return true;
     }
     onWeatherRecieved(weatherJson) {
-        console.info("onWeatherRecieved ran...");
+        //console.info("onWeatherRecieved ran...")
         //console.debug(weatherString)
         let weather = this.formatWeather(weatherJson);
         //console.debug(`Result weather: \n${JSON.stringify(weather)}`)
@@ -118,18 +118,18 @@ class WeatherReciever {
         }
     }
     formatWeather(weatherJson) {
-        console.info("formatWeather ran...");
+        //console.info("formatWeather ran...")
         return new entities_1.Weather(Date.now(), Math.round(weatherJson.main.temp - 273.15), weatherJson.main.pressure, weatherJson.main.humidity, weatherJson.wind.speed, weatherJson.wind.deg);
     }
     checkWeather() {
-        console.info("checkWeather ran...");
+        //console.info("checkWeather ran...")
     }
     /**
      * Sends a HTTP requesr to weather api
      * @returns returns the response as a string
      */
     sendHTTPRequest() {
-        console.info("sendHTTPRequest ran...");
+        //console.info("sendHTTPRequest ran...")
         let res = "";
         let url = this.getUrl();
         const self = this;
@@ -147,7 +147,7 @@ class WeatherReciever {
         return "";
     }
     dummyFunc(w) {
-        console.info("dummyFunc ran...");
+        //console.info("dummyFunc ran...")
         return false;
     }
 }
