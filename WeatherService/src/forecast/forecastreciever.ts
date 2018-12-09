@@ -1,24 +1,23 @@
-import { IWeatherReciever } from "../interfaces/boundaryinterfaces"
+import { IForecastReciever } from "../interfaces/boundaryinterfaces"
 import { Weather } from "../entities"
 import axios from 'axios'
 
 
-export class WeatherReciever implements IWeatherReciever{
+export class ForecastReciever implements IForecastReciever{
 
     private cycleDuration: number
     private cycleActive: boolean = false
 
-    private sendWeather: (weather: Weather) => boolean
+    private sendForecast: (forecast: ForecastJson) => boolean
 
     private baseUrl: string = "https://api.openweathermap.org/data/"
-    private query: string = "/2.5/weather?q=Leonding,at&appid=5cb2b2fa61fa541e7b13255fc29d5c61"
+    private query: string = "/2.5/forecast?q=Leonding,at&appid=5cb2b2fa61fa541e7b13255fc29d5c61"
     private cycle =  setInterval(() => { this.dummyFunc }, 0)
-    private lastWeather: Weather = new Weather(0,0,0,0,0,0)
 
 
     constructor(){
         this.cycleDuration = -1
-        this.sendWeather = this.dummyFunc
+        this.sendForecast = this.dummyFunc
     }
     
     /**
@@ -49,10 +48,10 @@ export class WeatherReciever implements IWeatherReciever{
      * Sets the funtion which is to bee called when new weather arrives
      * @param target The function which is to be called
      */
-    setRecieveFunction(target: (weather: Weather) => boolean): boolean {
+    setRecieveFunction(target: (forecast: ForecastJson) => boolean): boolean {
         //console.info("setRecieveFunction ran...")
         if(target == null) return false
-        this.sendWeather = target
+        this.sendForecast = target
         return true
     }
 
@@ -81,7 +80,7 @@ export class WeatherReciever implements IWeatherReciever{
             console.info("startCycle ran... cycleDuration <= 0")
             return false
         }
-        this.cycle = setInterval(() => { this.getWeather() }, this.cycleDuration)
+        this.cycle = setInterval(() => { this.getForecast() }, this.cycleDuration)
 
         this.cycleActive = true
         //console.info("startCycle ran...")
@@ -107,41 +106,19 @@ export class WeatherReciever implements IWeatherReciever{
         return url
     }
 
-    private getWeather(): boolean{
+    private getForecast(): boolean{
         //console.info("getWeather ran...")
         this.sendHTTPRequest()
         return true
     }
 
-    private onWeatherRecieved(weatherJson: WeatherJson){
+    private onForecastRecieved(forecastJson: ForecastJson){
         //console.info("onWeatherRecieved ran...")
         //console.debug(weatherString)
-        let weather = this.formatWeather(weatherJson)
         //console.debug(`Result weather: \n${JSON.stringify(weather)}`)
-        if(this.lastWeather.Equals(weather)){
-            console.info(`No change in weather: ${weather.timestamp}`)
-            return
-        }
-        else{
-            this.lastWeather = weather
-            this.sendWeather(weather)
-        }
+        this.sendForecast(forecastJson)
     }
 
-    private formatWeather(weatherJson: WeatherJson):Weather{
-        //console.info("formatWeather ran...")
-        return new Weather(Date.now(),
-                           Math.round(weatherJson.main.temp - 273.15), 
-                           weatherJson.main.pressure, 
-                           weatherJson.main.humidity, 
-                           weatherJson.wind.speed, 
-                           weatherJson.wind.deg)
-    }
-
-    private checkWeather(){
-        //console.info("checkWeather ran...")
-
-    }
 
     /**
      * Sends a HTTP requesr to weather api
@@ -157,7 +134,7 @@ export class WeatherReciever implements IWeatherReciever{
             //console.debug("cc")
             //console.debug(response.data)
             //let waetherString: string = JSON.stringify(response.data)
-            self.onWeatherRecieved(response.data)
+            self.onForecastRecieved(response.data)
           })
           .catch(function (error) {
             console.error(error);
@@ -166,7 +143,7 @@ export class WeatherReciever implements IWeatherReciever{
         return ""
     }
 
-    private dummyFunc(w: Weather): boolean{
+    private dummyFunc(w: ForecastJson): boolean{
         //console.info("dummyFunc ran...")
         return false
     }

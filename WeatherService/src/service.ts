@@ -1,8 +1,22 @@
 import { MqttClient } from './mqtt/mqttclient';
-import {Confighandler} from './config/config'
-import {WeatherReciever} from './weather/weatherreciever'
+import { Confighandler } from './config/config'
+import { WeatherReciever } from './weather/weatherreciever'
 import { Weather } from './entities';
-const greeting: string = "Hello World!"
+import { ForecastReciever } from './forecast/forecastreciever';
+
+
+function GetWeather(weather: Weather): boolean {
+    console.log('\x1b[32m',`New Weather Data arrived: \x1b[0m${JSON.stringify(weather)}`)
+    return true;
+}
+
+function GetForecast(forecast: ForecastJson): boolean {
+    console.log(`New Forecast arrived: ${JSON.stringify(forecast).substring(0,39)}...`)
+    return true;
+}
+
+
+const greeting: string = "WeatherService is running\n-------------------------"
 console.log(greeting)
 let c1 = new Confighandler()
 //c1.loadConfig("hoho")
@@ -14,14 +28,14 @@ wr.setRecieveFunction(GetWeather)
 wr.setCycleDuration(10000)
 wr.setCycleActive
 
-function GetWeather(weather: Weather):boolean{
-    console.log(`New Weather Data arrived ${JSON.stringify(weather)}`)
+let fr = new ForecastReciever()
+fr.setRecieveFunction(GetForecast)
+fr.setCycleDuration(10000)
+fr.setCycleActive
 
-    return true;
-}
 
-let mqttClient = new MqttClient(); 
+let mqttClient = new MqttClient();
 mqttClient.send("htlleonding", "test some ppps")
 
 
-console.log("Hey I'm working!")
+console.log("Awaiting data:\n")

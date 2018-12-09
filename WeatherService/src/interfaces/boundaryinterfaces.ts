@@ -1,17 +1,18 @@
 import { Confighandler } from '../config/config';
 import { Weather } from '../entities';
 
-export interface IWeatherReciever{
+interface IReciever{
     setCycleDuration(interval: number): boolean
-    setRecieveFunction(target: (weather: Weather) => boolean):boolean
     setCycleActive(status: boolean):boolean
     triggerSending():boolean
-    
 }
 
-interface IForecastReciever{
-    setCycleDuration(interval: number): boolean
+export interface IWeatherReciever extends IReciever{   
+    setRecieveFunction(target: (weather: Weather) => boolean):boolean 
+}
 
+export interface IForecastReciever extends IReciever{
+    setRecieveFunction(target: (forecast: ForecastJson) => boolean):boolean
 }
 
 interface IMQTTGateway{

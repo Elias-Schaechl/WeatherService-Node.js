@@ -3,7 +3,7 @@ export class Confighandler{
     constructor(){
     }
     loadConfig(path: string = this.path): void {
-        console.log("loadConfig ran... ( ${path} )")
+        //console.log("loadConfig ran... ( ${path} )")
 
     }
 }

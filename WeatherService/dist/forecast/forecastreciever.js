@@ -3,17 +3,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const entities_1 = require("../entities");
 const axios_1 = __importDefault(require("axios"));
-class WeatherReciever {
+class ForecastReciever {
     constructor() {
         this.cycleActive = false;
         this.baseUrl = "https://api.openweathermap.org/data/";
-        this.query = "/2.5/weather?q=Leonding,at&appid=5cb2b2fa61fa541e7b13255fc29d5c61";
+        this.query = "/2.5/forecast?q=Leonding,at&appid=5cb2b2fa61fa541e7b13255fc29d5c61";
         this.cycle = setInterval(() => { this.dummyFunc; }, 0);
-        this.lastWeather = new entities_1.Weather(0, 0, 0, 0, 0, 0);
         this.cycleDuration = -1;
-        this.sendWeather = this.dummyFunc;
+        this.sendForecast = this.dummyFunc;
     }
     /**
      * Sets a new intervall for requests
@@ -48,7 +46,7 @@ class WeatherReciever {
         //console.info("setRecieveFunction ran...")
         if (target == null)
             return false;
-        this.sendWeather = target;
+        this.sendForecast = target;
         return true;
     }
     /**
@@ -76,7 +74,7 @@ class WeatherReciever {
             console.info("startCycle ran... cycleDuration <= 0");
             return false;
         }
-        this.cycle = setInterval(() => { this.getWeather(); }, this.cycleDuration);
+        this.cycle = setInterval(() => { this.getForecast(); }, this.cycleDuration);
         this.cycleActive = true;
         //console.info("startCycle ran...")
         return true;
@@ -98,31 +96,16 @@ class WeatherReciever {
         const url = this.baseUrl + this.query;
         return url;
     }
-    getWeather() {
+    getForecast() {
         //console.info("getWeather ran...")
         this.sendHTTPRequest();
         return true;
     }
-    onWeatherRecieved(weatherJson) {
+    onForecastRecieved(forecastJson) {
         //console.info("onWeatherRecieved ran...")
         //console.debug(weatherString)
-        let weather = this.formatWeather(weatherJson);
         //console.debug(`Result weather: \n${JSON.stringify(weather)}`)
-        if (this.lastWeather.Equals(weather)) {
-            console.info(`No change in weather: ${weather.timestamp}`);
-            return;
-        }
-        else {
-            this.lastWeather = weather;
-            this.sendWeather(weather);
-        }
-    }
-    formatWeather(weatherJson) {
-        //console.info("formatWeather ran...")
-        return new entities_1.Weather(Date.now(), Math.round(weatherJson.main.temp - 273.15), weatherJson.main.pressure, weatherJson.main.humidity, weatherJson.wind.speed, weatherJson.wind.deg);
-    }
-    checkWeather() {
-        //console.info("checkWeather ran...")
+        this.sendForecast(forecastJson);
     }
     /**
      * Sends a HTTP requesr to weather api
@@ -138,7 +121,7 @@ class WeatherReciever {
             //console.debug("cc")
             //console.debug(response.data)
             //let waetherString: string = JSON.stringify(response.data)
-            self.onWeatherRecieved(response.data);
+            self.onForecastRecieved(response.data);
         })
             .catch(function (error) {
             console.error(error);
@@ -151,5 +134,5 @@ class WeatherReciever {
         return false;
     }
 }
-exports.WeatherReciever = WeatherReciever;
-//# sourceMappingURL=weatherreciever.js.map
+exports.ForecastReciever = ForecastReciever;
+//# sourceMappingURL=forecastreciever.js.map

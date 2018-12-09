@@ -5,7 +5,7 @@ class Confighandler {
         this.path = "./config.json";
     }
     loadConfig(path = this.path) {
-        console.log("loadConfig ran... ( ${path} )");
+        //console.log("loadConfig ran... ( ${path} )")
     }
 }
 exports.Confighandler = Confighandler;
