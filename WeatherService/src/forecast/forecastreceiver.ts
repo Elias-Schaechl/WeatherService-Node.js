@@ -1,9 +1,9 @@
-import { IForecastReciever } from "../interfaces/boundaryinterfaces"
+import { IForecastReceiver } from "../interfaces/boundaryinterfaces"
 import { Weather } from "../entities"
 import axios from 'axios'
 
 
-export class ForecastReciever implements IForecastReciever{
+export class ForecastReceiver implements IForecastReceiver{
 
     private cycleDuration: number
     private cycleActive: boolean = false
@@ -11,7 +11,7 @@ export class ForecastReciever implements IForecastReciever{
     private sendForecast: (forecast: ForecastJson) => boolean
 
     private baseUrl: string = "https://api.openweathermap.org/data/"
-    private query: string = "/2.5/forecast?q=Leonding,at&appid=5cb2b2fa61fa541e7b13255fc29d5c61"
+    private query: string = "2.5/forecast?q=Leonding,at&appid=5cb2b2fa61fa541e7b13255fc29d5c61"
     private cycle =  setInterval(() => { this.dummyFunc }, 0)
 
 
@@ -48,7 +48,7 @@ export class ForecastReciever implements IForecastReciever{
      * Sets the funtion which is to bee called when new weather arrives
      * @param target The function which is to be called
      */
-    setRecieveFunction(target: (forecast: ForecastJson) => boolean): boolean {
+    setReceiveFunction(target: (forecast: ForecastJson) => boolean): boolean {
         //console.info("setRecieveFunction ran...")
         if(target == null) return false
         this.sendForecast = target
@@ -80,6 +80,7 @@ export class ForecastReciever implements IForecastReciever{
             console.info("startCycle ran... cycleDuration <= 0")
             return false
         }
+        this.getForecast()
         this.cycle = setInterval(() => { this.getForecast() }, this.cycleDuration)
 
         this.cycleActive = true
@@ -112,7 +113,7 @@ export class ForecastReciever implements IForecastReciever{
         return true
     }
 
-    private onForecastRecieved(forecastJson: ForecastJson){
+    private onForecastReceived(forecastJson: ForecastJson){
         //console.info("onWeatherRecieved ran...")
         //console.debug(weatherString)
         //console.debug(`Result weather: \n${JSON.stringify(weather)}`)
@@ -134,7 +135,7 @@ export class ForecastReciever implements IForecastReciever{
             //console.debug("cc")
             //console.debug(response.data)
             //let waetherString: string = JSON.stringify(response.data)
-            self.onForecastRecieved(response.data)
+            self.onForecastReceived(response.data)
           })
           .catch(function (error) {
             console.error(error);

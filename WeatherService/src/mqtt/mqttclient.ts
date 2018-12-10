@@ -1,33 +1,36 @@
-import * as mqtt from "mqtt" ;
+import * as mqtt from "mqtt";
 
 
- 
 
-export class MqttClient{
 
-    readonly url:string = "vm61.htl-leonding.ac.at"
-    readonly port:string = "1883"
+export class MqttClient {
 
-    private client:mqtt.Client 
+    readonly url: string = "mqtt://vm61.htl-leonding.ac.at"
+    readonly port: string = "1883"
+    readonly username: string = "weather_client"
+    readonly password: string = "dhtnd54t"
+    readonly connectionOptions = {username: this.username, password: this.password}
 
-    constructor(){
+    private client: mqtt.Client
 
-        this.client = mqtt.connect(`${this.url}:${this.port}`)
+    constructor() {
+        console.log("MqttClient constructor()...")
+        this.client = mqtt.connect(`${this.url}:${this.port}`, this.connectionOptions)
 
-        const self = this
-        this.client.on('connect', function () {
-            self.client.subscribe('htlleonding/#', function (err) {
-                if (!err) {
-                    self.client.publish('presence', 'Hello mqtt')
-                }
-            })
-        })
-          
-        this.client.on('message', function (topic, message) {
-            // message is Buffer
-            console.log(message.toString())
-            self.client.end()
-        })
+        this.client.on('connect', this.onConnect)
+        this.client.on('message', this.onMessage)
+    }
+
+    onConnect() {
+        console.log(`Now connected to Broker`)
+    }
+
+    onMessage(topic: string, message: String): void {
+        console.log(`Topic: ${topic}, Message: ${message.toString().substring(0,60)}`)
+    }
+
+    subscribe(topic: string) {
+        this.client.subscribe(topic)
     }
 
     send(topic: string, message: string) {

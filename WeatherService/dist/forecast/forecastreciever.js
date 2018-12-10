@@ -8,7 +8,7 @@ class ForecastReciever {
     constructor() {
         this.cycleActive = false;
         this.baseUrl = "https://api.openweathermap.org/data/";
-        this.query = "/2.5/forecast?q=Leonding,at&appid=5cb2b2fa61fa541e7b13255fc29d5c61";
+        this.query = "2.5/forecast?q=Leonding,at&appid=5cb2b2fa61fa541e7b13255fc29d5c61";
         this.cycle = setInterval(() => { this.dummyFunc; }, 0);
         this.cycleDuration = -1;
         this.sendForecast = this.dummyFunc;
@@ -74,6 +74,7 @@ class ForecastReciever {
             console.info("startCycle ran... cycleDuration <= 0");
             return false;
         }
+        this.getForecast();
         this.cycle = setInterval(() => { this.getForecast(); }, this.cycleDuration);
         this.cycleActive = true;
         //console.info("startCycle ran...")

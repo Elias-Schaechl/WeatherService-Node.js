@@ -8,7 +8,7 @@ class Weather {
         this.humidity = humidity;
         this.windspeed = windspeed;
         this.winddir = winddir;
-        this.changed = Array(5).fill(true);
+        this.changed = Array(6).fill(true);
         this.temp = temp;
         this.pressure = pressure;
         this.humidity = humidity;

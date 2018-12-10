@@ -3,7 +3,7 @@ export class Weather{
     Equals(other: Weather): boolean {
         this.changed.fill(false)
         let equal: boolean = false
-        if(this.temp == other.temp){
+        if(this.temperature == other.temperature){
             equal = true
             this.changed[0] = true
         } 
@@ -30,24 +30,23 @@ export class Weather{
     changed: boolean[] = Array(5).fill(true) 
 
     constructor(readonly timestamp:number,
-                readonly temp: number, 
+                readonly temperature: number, 
                 readonly pressure: number, 
                 readonly humidity: number, 
                 readonly windspeed: number, 
                 readonly winddir:number,){
 
-        this.temp = temp
+        this.temperature = temperature
         this.pressure = pressure
         this.humidity = humidity
         this.windspeed = windspeed
-        this.winddir = winddir
-        
+        this.winddir = winddir        
     }
 }
 
 export class Unit{
 
-    readonly temp: string = "°C"
+    readonly temperature: string = "°C"
     readonly pressure: string = "%"
     readonly humidity: string = "hPa"
     readonly windspeed: string = "m/s"
