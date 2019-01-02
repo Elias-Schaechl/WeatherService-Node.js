@@ -14,7 +14,12 @@ class MqttClient {
         this.port = "1883";
         this.username = "weather_client";
         this.password = "dhtnd54t";
-        this.connectionOptions = { username: this.username, password: this.password };
+        this.wtopic = "";
+        this.wpayload = "";
+        this.wqos = 0;
+        this.wretain = false;
+        this.will = { topic: this.wtopic, payload: this.wpayload, qos: this.wqos, retain: this.wretain };
+        this.connectionOptions = { username: this.username, password: this.password, lastwill: this.will };
         console.log("MqttClient constructor()...");
         this.client = mqtt.connect(`${this.url}:${this.port}`, this.connectionOptions);
         this.client.on('connect', this.onConnect);

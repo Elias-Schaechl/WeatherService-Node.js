@@ -36,9 +36,7 @@ function sendMessage(topic, timestamp, value) {
 }
 const greeting = "WeatherService is running\n-------------------------";
 console.log(greeting);
-let c1 = new config_1.Confighandler();
-//c1.loadConfig("hoho")
-c1.loadConfig();
+let confighandler = config_1.Confighandler.Instance;
 let weatherReceiver = new weatherreceiver_1.WeatherReceiver();
 weatherReceiver.setReceiveFunction(getWeather);
 weatherReceiver.setCycleDuration(20 * 1000);

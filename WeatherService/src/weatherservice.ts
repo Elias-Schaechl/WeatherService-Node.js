@@ -42,9 +42,10 @@ function sendMessage(topic: string, timestamp: number, value: number) {
 
 const greeting: string = "WeatherService is running\n-------------------------"
 console.log(greeting)
-let c1 = new Confighandler()
-//c1.loadConfig("hoho")
-c1.loadConfig()
+
+let confighandler = Confighandler.Instance
+
+
 
 
 let weatherReceiver = new WeatherReceiver()
