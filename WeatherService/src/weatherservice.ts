@@ -46,16 +46,17 @@ console.log(greeting)
 let confighandler = Confighandler.Instance
 
 
-
+let second = 1000
+let hour = 60 * 60 * 1000
 
 let weatherReceiver = new WeatherReceiver()
 weatherReceiver.setReceiveFunction(getWeather)
-weatherReceiver.setCycleDuration(20 * 1000)
+weatherReceiver.setCycleDuration(20 * second)
 weatherReceiver.setCycleActive
 
 let forecastReceiver = new ForecastReceiver()
 forecastReceiver.setReceiveFunction(getForecast)
-forecastReceiver.setCycleDuration(60 * 60 * 1000)
+forecastReceiver.setCycleDuration(1 * hour)
 forecastReceiver.setCycleActive
 
 
