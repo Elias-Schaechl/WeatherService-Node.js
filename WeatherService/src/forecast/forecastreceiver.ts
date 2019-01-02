@@ -1,17 +1,20 @@
 import { IForecastReceiver } from "../interfaces/boundaryinterfaces"
 import { Weather } from "../entities"
 import axios from 'axios'
+import { Confighandler } from "../config/config";
 
 
 export class ForecastReceiver implements IForecastReceiver{
+
+    private handler: Confighandler = Confighandler.Instance
+    private baseUrl: string = this.handler.config.weatherreceiver.baseUrl
+    private query: string = this.handler.config.weatherreceiver.query
 
     private cycleDuration: number
     private cycleActive: boolean = false
 
     private sendForecast: (forecast: ForecastJson) => boolean
-
-    private baseUrl: string = "https://api.openweathermap.org/data/"
-    private query: string = "2.5/forecast?q=Leonding,at&appid=5cb2b2fa61fa541e7b13255fc29d5c61"
+    
     private cycle =  setInterval(() => { this.dummyFunc }, 0)
 
 

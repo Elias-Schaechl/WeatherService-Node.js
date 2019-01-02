@@ -4,11 +4,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = __importDefault(require("axios"));
+const config_1 = require("../config/config");
 class ForecastReceiver {
     constructor() {
+        this.handler = config_1.Confighandler.Instance;
+        this.baseUrl = this.handler.config.weatherreceiver.baseUrl;
+        this.query = this.handler.config.weatherreceiver.query;
         this.cycleActive = false;
-        this.baseUrl = "https://api.openweathermap.org/data/";
-        this.query = "2.5/forecast?q=Leonding,at&appid=5cb2b2fa61fa541e7b13255fc29d5c61";
         this.cycle = setInterval(() => { this.dummyFunc; }, 0);
         this.cycleDuration = -1;
         this.sendForecast = this.dummyFunc;

@@ -1,3 +1,4 @@
+import { Confighandler } from './../config/config';
 import * as mqtt from "mqtt";
 
 
@@ -5,14 +6,16 @@ import * as mqtt from "mqtt";
 
 export class MqttClient {
 
-    readonly url: string = "mqtt://vm61.htl-leonding.ac.at"
-    readonly port: string = "1883"
-    readonly username: string = "weather_client"
-    readonly password: string = "dhtnd54t"
-    readonly wtopic: string = ""
-    readonly wpayload: string = ""
-    readonly wqos: number = 0
-    readonly wretain: boolean = false 
+    private handler: Confighandler = Confighandler.Instance
+    readonly url: string = this.handler.config.mqttclient.url
+    readonly port: string = this.handler.config.mqttclient.port
+    readonly username: string = this.handler.config.mqttclient.username
+    readonly password: string = this.handler.config.mqttclient.password
+    readonly wtopic: string = this.handler.config.mqttclient.wtopic
+    readonly wpayload: string = this.handler.config.mqttclient.wpayload
+    readonly wqos: number = this.handler.config.mqttclient.wqos
+    readonly wretain: boolean = this.handler.config.mqttclient.wretain 
+
     readonly will = {topic: this.wtopic, payload: this.wpayload, qos: this.wqos, retain: this.wretain}
     readonly connectionOptions = {username: this.username, password: this.password, lastwill: this.will}
 
@@ -31,7 +34,7 @@ export class MqttClient {
     }
 
     onMessage(topic: string, message: String): void {
-        console.log(`Topic: ${topic}, Message: ${message.toString().substring(0,60)}`)
+        //console.log(`Topic: ${topic}, Message: ${message.toString().substring(0,60)}`)
     }
 
     subscribe(topic: string) {

@@ -2,29 +2,28 @@ export class Weather{
 
     Equals(other: Weather): boolean {
         this.changed.fill(false)
-        let equal: boolean = false
-        if(this.temperature == other.temperature){
-            equal = true
+        let equal: boolean = true
+        if(this.temperature != other.temperature){
+            equal = false
             this.changed[0] = true
         } 
-        if(this.pressure == other.pressure){
-            equal = true
+        if(this.pressure != other.pressure){
+            equal = false
             this.changed[1] = true
         } 
-        if(this.humidity == other.humidity){
-            equal = true
+        if(this.humidity != other.humidity){
+            equal = false
             this.changed[2] = true
         } 
-        if(this.windspeed == other.windspeed){
-            equal = true
+        if(this.windspeed != other.windspeed){
+            equal = false
             this.changed[3] = true
         } 
-        if(this.winddir == other.winddir){
-            equal = true
+        if(this.winddir != other.winddir){
+            equal = false
             this.changed[4] = true
         } 
-        if(!equal) return false
-        return true
+        return equal
     }
 
     changed: boolean[] = Array(5).fill(true) 

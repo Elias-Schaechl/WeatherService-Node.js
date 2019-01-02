@@ -1,17 +1,20 @@
 import { IWeatherReceiver } from "../interfaces/boundaryinterfaces"
 import { Weather } from "../entities"
 import axios from 'axios'
+import { Confighandler } from "../config/config";
 
 
 export class WeatherReceiver implements IWeatherReceiver{
+
+    private handler: Confighandler = Confighandler.Instance
+    private baseUrl: string = this.handler.config.weatherreceiver.baseUrl
+    private query: string = this.handler.config.weatherreceiver.query
 
     private cycleDuration: number
     private cycleActive: boolean = false
 
     private sendWeather: (weather: Weather) => boolean
 
-    private baseUrl: string = "https://api.openweathermap.org/data/"
-    private query: string = "2.5/weather?q=Leonding,at&appid=5cb2b2fa61fa541e7b13255fc29d5c61"
     private cycle =  setInterval(() => { this.dummyFunc }, 0)
     private lastWeather: Weather = new Weather(0,0,0,0,0,0)
 

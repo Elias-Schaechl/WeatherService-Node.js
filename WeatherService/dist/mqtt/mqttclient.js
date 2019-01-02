@@ -7,17 +7,19 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const config_1 = require("./../config/config");
 const mqtt = __importStar(require("mqtt"));
 class MqttClient {
     constructor() {
-        this.url = "mqtt://vm61.htl-leonding.ac.at";
-        this.port = "1883";
-        this.username = "weather_client";
-        this.password = "dhtnd54t";
-        this.wtopic = "";
-        this.wpayload = "";
-        this.wqos = 0;
-        this.wretain = false;
+        this.handler = config_1.Confighandler.Instance;
+        this.url = this.handler.config.mqttclient.url;
+        this.port = this.handler.config.mqttclient.port;
+        this.username = this.handler.config.mqttclient.username;
+        this.password = this.handler.config.mqttclient.password;
+        this.wtopic = this.handler.config.mqttclient.wtopic;
+        this.wpayload = this.handler.config.mqttclient.wpayload;
+        this.wqos = this.handler.config.mqttclient.wqos;
+        this.wretain = this.handler.config.mqttclient.wretain;
         this.will = { topic: this.wtopic, payload: this.wpayload, qos: this.wqos, retain: this.wretain };
         this.connectionOptions = { username: this.username, password: this.password, lastwill: this.will };
         console.log("MqttClient constructor()...");
@@ -29,7 +31,7 @@ class MqttClient {
         console.log(`Now connected to Broker`);
     }
     onMessage(topic, message) {
-        console.log(`Topic: ${topic}, Message: ${message.toString().substring(0, 60)}`);
+        //console.log(`Topic: ${topic}, Message: ${message.toString().substring(0,60)}`)
     }
     subscribe(topic) {
         this.client.subscribe(topic);
