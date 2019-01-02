@@ -9,7 +9,12 @@ export class MqttClient {
     readonly port: string = "1883"
     readonly username: string = "weather_client"
     readonly password: string = "dhtnd54t"
-    readonly connectionOptions = {username: this.username, password: this.password}
+    readonly wtopic: string = ""
+    readonly wpayload: string = ""
+    readonly wqos: number = 0
+    readonly wretain: boolean = false 
+    readonly will = {topic: this.wtopic, payload: this.wpayload, qos: this.wqos, retain: this.wretain}
+    readonly connectionOptions = {username: this.username, password: this.password, lastwill: this.will}
 
     private client: mqtt.Client
 

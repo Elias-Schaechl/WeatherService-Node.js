@@ -7,12 +7,12 @@ interface IReciever{
     triggerSending():boolean
 }
 
-export interface IWeatherReciever extends IReciever{   
-    setRecieveFunction(target: (weather: Weather) => boolean):boolean 
+export interface IWeatherReceiver extends IReciever{   
+    setReceiveFunction(target: (weather: Weather) => boolean):boolean 
 }
 
-export interface IForecastReciever extends IReciever{
-    setRecieveFunction(target: (forecast: ForecastJson) => boolean):boolean
+export interface IForecastReceiver extends IReciever{
+    setReceiveFunction(target: (forecast: ForecastJson) => boolean):boolean
 }
 
 interface IMQTTGateway{

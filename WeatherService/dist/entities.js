@@ -1,15 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class Weather {
-    constructor(timestamp, temp, pressure, humidity, windspeed, winddir) {
+    constructor(timestamp, temperature, pressure, humidity, windspeed, winddir) {
         this.timestamp = timestamp;
-        this.temp = temp;
+        this.temperature = temperature;
         this.pressure = pressure;
         this.humidity = humidity;
         this.windspeed = windspeed;
         this.winddir = winddir;
-        this.changed = Array(6).fill(true);
-        this.temp = temp;
+        this.changed = Array(5).fill(true);
+        this.temperature = temperature;
         this.pressure = pressure;
         this.humidity = humidity;
         this.windspeed = windspeed;
@@ -18,7 +18,7 @@ class Weather {
     Equals(other) {
         this.changed.fill(false);
         let equal = false;
-        if (this.temp == other.temp) {
+        if (this.temperature == other.temperature) {
             equal = true;
             this.changed[0] = true;
         }
@@ -46,7 +46,7 @@ class Weather {
 exports.Weather = Weather;
 class Unit {
     constructor() {
-        this.temp = "°C";
+        this.temperature = "°C";
         this.pressure = "%";
         this.humidity = "hPa";
         this.windspeed = "m/s";
