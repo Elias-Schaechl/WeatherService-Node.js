@@ -22,6 +22,7 @@ class MqttClient {
         this.wretain = this.handler.config.mqttclient.wretain;
         this.will = { topic: this.wtopic, payload: this.wpayload, qos: this.wqos, retain: this.wretain };
         this.connectionOptions = { username: this.username, password: this.password, lastwill: this.will };
+        this.subscriptions = new Set();
         console.log("MqttClient constructor()...");
         this.client = mqtt.connect(`${this.url}:${this.port}`, this.connectionOptions);
         this.client.on('connect', this.onConnect);
@@ -31,13 +32,20 @@ class MqttClient {
         console.log(`Now connected to Broker`);
     }
     onMessage(topic, message) {
-        //console.log(`Topic: ${topic}, Message: ${message.toString().substring(0,60)}`)
+        for (let subscription of this.subscriptions) {
+            if (topic == subscription.topic) {
+                subscription.onMessage(topic, message);
+            }
+        }
     }
-    subscribe(topic) {
+    subscribe(topic, target) {
         this.client.subscribe(topic);
+        this.subscriptions.add({ "topic": topic, "onMessage": target });
     }
     send(topic, message) {
         this.client.publish(topic, message);
+    }
+    sampleTopic(topic, message) {
     }
 }
 exports.MqttClient = MqttClient;

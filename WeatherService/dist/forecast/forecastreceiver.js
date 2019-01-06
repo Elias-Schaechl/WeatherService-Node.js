@@ -99,9 +99,20 @@ class ForecastReceiver {
         const url = this.baseUrl + this.query;
         return url;
     }
-    getForecast() {
+    async getForecast() {
         //console.info("getWeather ran...")
-        this.sendHTTPRequest();
+        let responseData = await this.sendHTTPRequest();
+        if (responseData == "")
+            return false;
+        try {
+            let forecastJson = JSON.parse(JSON.stringify(responseData));
+            this.onForecastReceived(forecastJson);
+        }
+        catch (error) {
+            console.error("Error at forecast json parsing!");
+            console.error(error);
+            return false;
+        }
         return true;
     }
     onForecastReceived(forecastJson) {
@@ -114,23 +125,19 @@ class ForecastReceiver {
      * Sends a HTTP requesr to weather api
      * @returns returns the response as a string
      */
-    sendHTTPRequest() {
+    async sendHTTPRequest() {
         //console.info("sendHTTPRequest ran...")
         let res = "";
         let url = this.getUrl();
-        const self = this;
-        axios_1.default.get(url)
-            .then(function (response) {
-            //console.debug("cc")
-            //console.debug(response.data)
-            //let waetherString: string = JSON.stringify(response.data)
-            self.onForecastReceived(response.data);
-        })
-            .catch(function (error) {
-            console.error(error);
-        });
-        console.debug(url);
-        return "";
+        try {
+            let response = await axios_1.default.get(url);
+            return response.data;
+        }
+        catch (error) {
+            console.error("Error at forecast http request!");
+            return "";
+        }
+        //console.debug(url) 
     }
     dummyFunc(w) {
         //console.info("dummyFunc ran...")

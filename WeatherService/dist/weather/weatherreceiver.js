@@ -8,12 +8,21 @@ const axios_1 = __importDefault(require("axios"));
 const config_1 = require("../config/config");
 class WeatherReceiver {
     constructor() {
+        //
+        //Instance of Confighandler
         this.handler = config_1.Confighandler.Instance;
+        //
+        //Api connection fields
         this.baseUrl = this.handler.config.weatherreceiver.baseUrl;
         this.query = this.handler.config.weatherreceiver.query;
         this.cycleActive = false;
         this.cycle = setInterval(() => { this.dummyFunc; }, 0);
         this.lastWeather = new entities_1.Weather(0, 0, 0, 0, 0, 0);
+        /**
+         * true/false : internal weather is/is not available
+         */
+        this.sourceMode = false;
+        this.lastMessagetime = 0;
         this.cycleDuration = -1;
         this.sendWeather = this.dummyFunc;
     }
@@ -101,10 +110,25 @@ class WeatherReceiver {
         const url = this.baseUrl + this.query;
         return url;
     }
-    getWeather() {
+    async getWeather() {
         //console.info("getWeather ran...")
-        this.sendHTTPRequest();
-        return true;
+        if (this.sourceMode) {
+        }
+        else {
+            let responseData = await this.sendHTTPRequest();
+            if (responseData == "")
+                return false;
+            try {
+                let weatherJson = JSON.parse(JSON.stringify(responseData));
+                this.onWeatherReceived(weatherJson);
+            }
+            catch (error) {
+                console.error("Error at weather json parsing!");
+                console.error(error);
+                return false;
+            }
+            return true;
+        }
     }
     onWeatherReceived(weatherJson) {
         //console.info("onWeatherRecieved ran...")
@@ -131,23 +155,19 @@ class WeatherReceiver {
      * Sends a HTTP requesr to weather api
      * @returns returns the response as a string
      */
-    sendHTTPRequest() {
+    async sendHTTPRequest() {
         //console.info("sendHTTPRequest ran...")
         let res = "";
         let url = this.getUrl();
-        const self = this;
-        axios_1.default.get(url)
-            .then(function (response) {
-            //console.debug("cc")
-            //console.debug(response.data)
-            //let waetherString: string = JSON.stringify(response.data)
-            self.onWeatherReceived(response.data);
-        })
-            .catch(function (error) {
-            console.error(error);
-        });
+        try {
+            let response = await axios_1.default.get(url);
+            return response.data;
+        }
+        catch (error) {
+            console.error("Error at weather http request!");
+            return "";
+        }
         //console.debug(url) 
-        return "";
     }
     dummyFunc(w) {
         //console.info("dummyFunc ran...")

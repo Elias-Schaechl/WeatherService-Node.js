@@ -5,20 +5,31 @@ import { Confighandler } from "../config/config";
 
 
 export class WeatherReceiver implements IWeatherReceiver{
-
-    
+    //
+    //Instance of Confighandler
     private handler: Confighandler = Confighandler.Instance
+
+    //
+    //Api connection fields
     private baseUrl: string = this.handler.config.weatherreceiver.baseUrl
     private query: string = this.handler.config.weatherreceiver.query
 
+    //
     //Cycle fields
     private cycleDuration: number
     private cycleActive: boolean = false
+    private cycle =  setInterval(() => { this.dummyFunc }, 0)
 
     private sendWeather: (weather: Weather) => boolean
 
-    private cycle =  setInterval(() => { this.dummyFunc }, 0)
     private lastWeather: Weather = new Weather(0,0,0,0,0,0)
+
+    /**
+     * true/false : internal weather is/is not available
+     */
+    private sourceMode: boolean = false
+    private lastMessagetime: number = 0
+
 
 
     constructor(){
@@ -113,10 +124,24 @@ export class WeatherReceiver implements IWeatherReceiver{
         return url
     }
 
-    private getWeather(): boolean{
+    private async getWeather(){
         //console.info("getWeather ran...")
-        this.sendHTTPRequest()
-        return true
+        if(this.sourceMode){
+
+        }
+        else{
+            let responseData = await this.sendHTTPRequest()
+            if(responseData == "") return false
+            try {
+                let weatherJson : WeatherJson = JSON.parse(JSON.stringify(responseData))
+                this.onWeatherReceived(weatherJson)
+            } catch (error) {
+                console.error("Error at weather json parsing!")
+                console.error(error)
+                return false
+            }
+            return true
+        }
     }
 
     private onWeatherReceived(weatherJson: WeatherJson){
@@ -146,30 +171,24 @@ export class WeatherReceiver implements IWeatherReceiver{
 
     private checkWeather(){
         //console.info("checkWeather ran...")
-
     }
 
     /**
      * Sends a HTTP requesr to weather api
      * @returns returns the response as a string
      */
-    private sendHTTPRequest():string{
+    private async sendHTTPRequest():Promise<string>{
         //console.info("sendHTTPRequest ran...")
         let res: string = ""
         let url: string = this.getUrl()
-        const self = this
-        axios.get(url)
-          .then(function (response) {
-            //console.debug("cc")
-            //console.debug(response.data)
-            //let waetherString: string = JSON.stringify(response.data)
-            self.onWeatherReceived(response.data)
-          })
-          .catch(function (error) {
-            console.error(error);
-          });
+        try {
+            let response = await axios.get(url)
+            return response.data
+        } catch (error) {
+            console.error("Error at weather http request!")
+            return ""
+        }
         //console.debug(url) 
-        return ""
     }
 
     private dummyFunc(w: Weather): boolean{
