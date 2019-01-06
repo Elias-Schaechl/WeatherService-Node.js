@@ -1,3 +1,4 @@
+import { MqttClient } from './../mqtt/mqttclient';
 import { IWeatherReceiver } from "../interfaces/boundaryinterfaces"
 import { Weather } from "../entities"
 import axios from 'axios'
@@ -24,6 +25,15 @@ export class WeatherReceiver implements IWeatherReceiver{
 
     private lastWeather: Weather = new Weather(0,0,0,0,0,0)
 
+    //
+    //Mqtt client
+    private mqttClient: MqttClient
+    private temperatureTopic: string = this.handler.config.weather.temperaturetopic
+    private pressureTopic: string = this.handler.config.weather.pressuretopic
+    private humidityTopic: string = this.handler.config.weather.humiditytopic
+    private windSpeedTopic: string = this.handler.config.weather.windspeedtopic
+    private windDegTopic: string = this.handler.config.weather.winddegtopic
+
     /**
      * true/false : internal weather is/is not available
      */
@@ -32,9 +42,11 @@ export class WeatherReceiver implements IWeatherReceiver{
 
 
 
-    constructor(){
+    constructor(mqttClient: MqttClient){
+        this.mqttClient = mqttClient
         this.cycleDuration = -1
         this.sendWeather = this.dummyFunc
+        this.makeSubscriptions()
     }
     
     /**
@@ -88,6 +100,52 @@ export class WeatherReceiver implements IWeatherReceiver{
         this.cycleActive = status
         return true
     }
+
+    private makeSubscriptions(){
+        this.mqttClient.subscribe(this.temperatureTopic,this.onNewTemperature)
+        this.mqttClient.subscribe(this.pressureTopic,this.onNewPressure)
+        this.mqttClient.subscribe(this.humidityTopic,this.onNewHumidity)
+        this.mqttClient.subscribe(this.windSpeedTopic,this.onNewWindSpeed)
+        this.mqttClient.subscribe(this.windDegTopic,this.onNewWindDeg)
+    }
+
+    private onNewTemperature(topic: string, message: string){
+        if(this.lastWeather.temperature != +message){
+            this.lastWeather.temperature = +message
+            this.lastWeather.changed[0] = true
+            this.sendWeather(this.lastWeather)
+        }
+    }
+    private onNewPressure(topic: string, message: string){
+        if(this.lastWeather.pressure != +message){
+            this.lastWeather.pressure = +message
+            this.lastWeather.changed[1] = true
+            this.sendWeather(this.lastWeather)
+        }
+    }
+    private onNewHumidity(topic: string, message: string){
+        if(this.lastWeather.humidity != +message){
+            this.lastWeather.humidity = +message
+            this.lastWeather.changed[2] = true
+            this.sendWeather(this.lastWeather)
+        }
+    }
+    private onNewWindSpeed(topic: string, message: string){
+        if(this.lastWeather.windspeed != +message){
+            this.lastWeather.windspeed = +message
+            this.lastWeather.changed[3] = true
+            this.sendWeather(this.lastWeather)
+        }
+    }
+    private onNewWindDeg(topic: string, message: string){
+        if(this.lastWeather.winddir != +message){
+            this.lastWeather.winddir = +message
+            this.lastWeather.changed[4] = true
+            this.sendWeather(this.lastWeather)
+        }
+    }
+
+
 
     /**
      * Start cycle

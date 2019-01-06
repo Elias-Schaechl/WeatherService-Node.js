@@ -28,19 +28,24 @@ class MqttClient {
         this.client.on('connect', this.onConnect);
         this.client.on('message', this.onMessage);
     }
+    static get Instance() {
+        return this._instance || (this._instance = new this());
+    }
     onConnect() {
         console.log(`Now connected to Broker`);
     }
     onMessage(topic, message) {
-        for (let subscription of this.subscriptions) {
+        console.log(this.subscriptions);
+        this.subscriptions.forEach(function (subscription) {
             if (topic == subscription.topic) {
                 subscription.onMessage(topic, message);
             }
-        }
+        });
     }
     subscribe(topic, target) {
         this.client.subscribe(topic);
         this.subscriptions.add({ "topic": topic, "onMessage": target });
+        console.log(this.subscriptions);
     }
     send(topic, message) {
         this.client.publish(topic, message);

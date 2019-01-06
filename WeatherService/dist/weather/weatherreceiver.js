@@ -7,7 +7,7 @@ const entities_1 = require("../entities");
 const axios_1 = __importDefault(require("axios"));
 const config_1 = require("../config/config");
 class WeatherReceiver {
-    constructor() {
+    constructor(mqttClient) {
         //
         //Instance of Confighandler
         this.handler = config_1.Confighandler.Instance;
@@ -23,6 +23,7 @@ class WeatherReceiver {
          */
         this.sourceMode = false;
         this.lastMessagetime = 0;
+        this.mqttClient = mqttClient;
         this.cycleDuration = -1;
         this.sendWeather = this.dummyFunc;
     }
@@ -78,6 +79,8 @@ class WeatherReceiver {
         }
         this.cycleActive = status;
         return true;
+    }
+    onNewTemperature() {
     }
     /**
      * Start cycle

@@ -28,12 +28,12 @@ export class Weather{
 
     changed: boolean[] = Array(5).fill(true) 
 
-    constructor(readonly timestamp:number,
-                readonly temperature: number, 
-                readonly pressure: number, 
-                readonly humidity: number, 
-                readonly windspeed: number, 
-                readonly winddir:number,){
+    constructor(public timestamp:number,
+        public temperature: number, 
+        public pressure: number, 
+        public humidity: number, 
+        public windspeed: number, 
+        public winddir:number,){
 
         this.temperature = temperature
         this.pressure = pressure
@@ -41,6 +41,7 @@ export class Weather{
         this.windspeed = windspeed
         this.winddir = winddir        
     }
+    
 }
 
 export class Unit{

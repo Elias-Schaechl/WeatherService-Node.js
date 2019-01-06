@@ -23,7 +23,9 @@ export class MqttClient {
     private subscriptions = new Set()
     private client: mqtt.Client
 
-    constructor() {
+    private static _instance: MqttClient;
+
+    private constructor(){
         console.log("MqttClient constructor()...")
         this.client = mqtt.connect(`${this.url}:${this.port}`, this.connectionOptions)
 
@@ -31,21 +33,30 @@ export class MqttClient {
         this.client.on('message', this.onMessage)
     }
 
+    public static get Instance()
+    {
+        return this._instance || (this._instance = new this());
+    }
+
+
     onConnect() {
         console.log(`Now connected to Broker`)
     }
 
     onMessage(topic: string, message: string): void {
-        for(let subscription of this.subscriptions){
+        console.log (this.subscriptions)
+        this.subscriptions.forEach(function(subscription){
             if(topic == subscription.topic){
                 subscription.onMessage(topic, message)
             }
-        }
+        })
     }
 
-    subscribe(topic: string, target: (topic: string, message: string) => void) {
+    public subscribe(topic: string, target: (topic: string, message: string) => void) {
         this.client.subscribe(topic)
         this.subscriptions.add({"topic": topic, "onMessage": target})
+        console.log (this.subscriptions)
+
     }
 
     send(topic: string, message: string) {
