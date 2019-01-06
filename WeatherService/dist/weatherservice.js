@@ -37,13 +37,15 @@ function sendMessage(topic, timestamp, value) {
 const greeting = "WeatherService is running\n-------------------------";
 console.log(greeting);
 let confighandler = config_1.Confighandler.Instance;
+let second = 1000;
+let hour = 60 * 60 * 1000;
 let weatherReceiver = new weatherreceiver_1.WeatherReceiver();
 weatherReceiver.setReceiveFunction(getWeather);
-weatherReceiver.setCycleDuration(20 * 1000);
+weatherReceiver.setCycleDuration(20 * second);
 weatherReceiver.setCycleActive;
 let forecastReceiver = new forecastreceiver_1.ForecastReceiver();
 forecastReceiver.setReceiveFunction(getForecast);
-forecastReceiver.setCycleDuration(60 * 60 * 1000);
+forecastReceiver.setCycleDuration(1 * hour);
 forecastReceiver.setCycleActive;
 let mqttClient = new mqttclient_1.MqttClient();
 mqttClient.subscribe("htlleonding/#");

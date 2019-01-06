@@ -6,10 +6,12 @@ import { Confighandler } from "../config/config";
 
 export class WeatherReceiver implements IWeatherReceiver{
 
+    
     private handler: Confighandler = Confighandler.Instance
     private baseUrl: string = this.handler.config.weatherreceiver.baseUrl
     private query: string = this.handler.config.weatherreceiver.query
 
+    //Cycle fields
     private cycleDuration: number
     private cycleActive: boolean = false
 

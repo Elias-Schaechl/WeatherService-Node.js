@@ -1,3 +1,6 @@
+/**
+ * Representing forecast received by weather api
+ */
 interface ForecastJson {
   cod: string;
   message: number;
@@ -61,6 +64,56 @@ interface Main {
   pressure: number;
   sea_level: number;
   grnd_level: number;
+  humidity: number;
+  temp_kf: number;
+}
+
+/**
+ * 
+ */
+interface LongForecastJson {
+  cod: string;
+  message: number;
+  cnt: number;
+  list: List[];
+}
+
+interface List {
+  dt: number;
+  main: Main;
+  weather: Weather[];
+  clouds: Clouds;
+  wind: Wind;
+  dt_txt: string;
+  rain?: Rain;
+  snow?: Rain;
+}
+
+interface Rain {
+  '3h'?: number;
+}
+
+interface Wind {
+  speed: number;
+  deg: number;
+}
+
+interface Clouds {
+  all: number;
+}
+
+interface Weather {
+  id: number;
+  main: string;
+  description: string;
+  icon: string;
+}
+
+interface Main {
+  temp: number;
+  temp_min: number;
+  temp_max: number;
+  pressure: number;
   humidity: number;
   temp_kf: number;
 }

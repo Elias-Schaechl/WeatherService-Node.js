@@ -8,8 +8,8 @@ const config_1 = require("../config/config");
 class ForecastReceiver {
     constructor() {
         this.handler = config_1.Confighandler.Instance;
-        this.baseUrl = this.handler.config.weatherreceiver.baseUrl;
-        this.query = this.handler.config.weatherreceiver.query;
+        this.baseUrl = this.handler.config.forecastreceiver.baseUrl;
+        this.query = this.handler.config.forecastreceiver.query;
         this.cycleActive = false;
         this.cycle = setInterval(() => { this.dummyFunc; }, 0);
         this.cycleDuration = -1;
@@ -129,7 +129,7 @@ class ForecastReceiver {
             .catch(function (error) {
             console.error(error);
         });
-        //console.debug(url) 
+        console.debug(url);
         return "";
     }
     dummyFunc(w) {

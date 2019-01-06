@@ -7,8 +7,8 @@ import { Confighandler } from "../config/config";
 export class ForecastReceiver implements IForecastReceiver{
 
     private handler: Confighandler = Confighandler.Instance
-    private baseUrl: string = this.handler.config.weatherreceiver.baseUrl
-    private query: string = this.handler.config.weatherreceiver.query
+    private baseUrl: string = this.handler.config.forecastreceiver.baseUrl
+    private query: string = this.handler.config.forecastreceiver.query
 
     private cycleDuration: number
     private cycleActive: boolean = false
@@ -143,7 +143,7 @@ export class ForecastReceiver implements IForecastReceiver{
           .catch(function (error) {
             console.error(error);
           });
-        //console.debug(url) 
+        console.debug(url) 
         return ""
     }
 
