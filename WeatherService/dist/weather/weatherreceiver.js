@@ -18,6 +18,11 @@ class WeatherReceiver {
         this.cycleActive = false;
         this.cycle = setInterval(() => { this.dummyFunc; }, 0);
         this.lastWeather = new entities_1.Weather(0, 0, 0, 0, 0, 0);
+        this.temperatureTopic = this.handler.config.weather.temperaturetopic;
+        this.pressureTopic = this.handler.config.weather.pressuretopic;
+        this.humidityTopic = this.handler.config.weather.humiditytopic;
+        this.windSpeedTopic = this.handler.config.weather.windspeedtopic;
+        this.windDegTopic = this.handler.config.weather.winddegtopic;
         /**
          * true/false : internal weather is/is not available
          */
@@ -26,6 +31,7 @@ class WeatherReceiver {
         this.mqttClient = mqttClient;
         this.cycleDuration = -1;
         this.sendWeather = this.dummyFunc;
+        this.makeSubscriptions();
     }
     /**
      * Sets a new intervall for requests
@@ -80,7 +86,47 @@ class WeatherReceiver {
         this.cycleActive = status;
         return true;
     }
-    onNewTemperature() {
+    makeSubscriptions() {
+        this.mqttClient.subscribe(this.temperatureTopic, this.onNewTemperature);
+        this.mqttClient.subscribe(this.pressureTopic, this.onNewPressure);
+        this.mqttClient.subscribe(this.humidityTopic, this.onNewHumidity);
+        this.mqttClient.subscribe(this.windSpeedTopic, this.onNewWindSpeed);
+        this.mqttClient.subscribe(this.windDegTopic, this.onNewWindDeg);
+    }
+    onNewTemperature(topic, message) {
+        if (this.lastWeather.temperature != +message) {
+            this.lastWeather.temperature = +message;
+            this.lastWeather.changed[0] = true;
+            this.sendWeather(this.lastWeather);
+        }
+    }
+    onNewPressure(topic, message) {
+        if (this.lastWeather.pressure != +message) {
+            this.lastWeather.pressure = +message;
+            this.lastWeather.changed[1] = true;
+            this.sendWeather(this.lastWeather);
+        }
+    }
+    onNewHumidity(topic, message) {
+        if (this.lastWeather.humidity != +message) {
+            this.lastWeather.humidity = +message;
+            this.lastWeather.changed[2] = true;
+            this.sendWeather(this.lastWeather);
+        }
+    }
+    onNewWindSpeed(topic, message) {
+        if (this.lastWeather.windspeed != +message) {
+            this.lastWeather.windspeed = +message;
+            this.lastWeather.changed[3] = true;
+            this.sendWeather(this.lastWeather);
+        }
+    }
+    onNewWindDeg(topic, message) {
+        if (this.lastWeather.winddir != +message) {
+            this.lastWeather.winddir = +message;
+            this.lastWeather.changed[4] = true;
+            this.sendWeather(this.lastWeather);
+        }
     }
     /**
      * Start cycle

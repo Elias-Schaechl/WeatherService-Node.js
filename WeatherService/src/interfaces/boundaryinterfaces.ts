@@ -12,7 +12,7 @@ export interface IWeatherReceiver extends IReciever{
 }
 
 export interface IForecastReceiver extends IReciever{
-    setReceiveFunction(target: (forecast: ForecastJson) => boolean):boolean
+    setReceiveFunction(target: (forecast: ForecastJson, aggrforecast: AggrForecastJson) => boolean):boolean
 }
 
 interface IMQTTGateway{

@@ -1,5 +1,4 @@
 import { IForecastReceiver } from "../interfaces/boundaryinterfaces"
-import { Weather } from "../entities"
 import axios from 'axios'
 import { Confighandler } from "../config/config";
 
@@ -13,7 +12,7 @@ export class ForecastReceiver implements IForecastReceiver{
     private cycleDuration: number
     private cycleActive: boolean = false
 
-    private sendForecast: (forecast: ForecastJson) => boolean
+    private sendForecast: (forecast: ForecastJson, aggrforecast: AggrForecastJson) => boolean
     
     private cycle =  setInterval(() => { this.dummyFunc }, 0)
 
@@ -51,7 +50,7 @@ export class ForecastReceiver implements IForecastReceiver{
      * Sets the funtion which is to bee called when new weather arrives
      * @param target The function which is to be called
      */
-    setReceiveFunction(target: (forecast: ForecastJson) => boolean): boolean {
+    setReceiveFunction(target: (forecast: ForecastJson, aggrforecast: AggrForecastJson) => boolean): boolean {
         //console.info("setRecieveFunction ran...")
         if(target == null) return false
         this.sendForecast = target
@@ -129,7 +128,68 @@ export class ForecastReceiver implements IForecastReceiver{
         //console.info("onWeatherRecieved ran...")
         //console.debug(weatherString)
         //console.debug(`Result weather: \n${JSON.stringify(weather)}`)
-        this.sendForecast(forecastJson)
+        let aggrForecastJson = this.aggregateForecast(forecastJson)
+        this.sendForecast(forecastJson,aggrForecastJson)
+    }
+
+    private aggregateForecast(forecastJson: ForecastJson): any {
+        let aggrForecastJson: AggrForecastJson = forecastJson
+        let oldList = aggrForecastJson.list
+        let firstDate = new Date(oldList[0].dt_txt)
+        let scipCnt: number = (24 - firstDate.getHours())/3 -1
+        if(scipCnt == 8) scipCnt = 0
+
+        console.log(scipCnt)
+
+        let newList: List[] = []
+
+        for( var i = scipCnt; i < oldList.length - 8; i += 8){
+            
+            let temp: number = 0
+            let mintemp: number
+            let maxtemp: number
+            let pressure: number = 0
+            let pressuregrnd: number = 0
+            let pressuresea: number = 0
+            let humidity: number = 0
+            let clouds: number = 0
+            let windspeed: number = 0
+            let winddeg: number = 0
+            let rain: number = 0
+            let snow: number = 0
+
+            
+            
+            for( var j = i; j < i + 8; j++){
+                temp += oldList[i].main.temp/8
+
+
+            }
+
+            var listMain: Main = {
+
+            }
+
+            var newElement: List = {
+                dt: 0,
+                main: listMain,
+                weather: [
+                    id: 0,
+                    main: "",
+                    description: "",
+                    icon: ""
+                ],
+                clouds: Clouds;
+                wind: Wind;
+                dt_txt: "string",
+                rain?: Rain;
+                snow?: Rain;
+            }
+            newList.push(newElement)
+
+        }
+        aggrForecastJson.list = newList
+        return aggrForecastJson
     }
 
 

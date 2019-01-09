@@ -119,7 +119,23 @@ class ForecastReceiver {
         //console.info("onWeatherRecieved ran...")
         //console.debug(weatherString)
         //console.debug(`Result weather: \n${JSON.stringify(weather)}`)
-        this.sendForecast(forecastJson);
+        let aggrForecastJson = this.aggregateForecast(forecastJson);
+        this.sendForecast(forecastJson, aggrForecastJson);
+    }
+    aggregateForecast(forecastJson) {
+        let aggrForecastJson = forecastJson;
+        let daycdt = 0;
+        let oldList = aggrForecastJson.list;
+        let firstDate = new Date(oldList[0].dt_txt);
+        console.log(firstDate);
+        console.log(firstDate.getHours());
+        console.log(oldList[0].dt_txt);
+        let scipCnt = (24 - firstDate.getHours()) / 3;
+        console.log(scipCnt);
+        //for( var i = 0; i < oldList.length; i++){
+        //    if(i < 5)
+        //}
+        return aggrForecastJson;
     }
     /**
      * Sends a HTTP requesr to weather api

@@ -37,6 +37,10 @@ interface Rain {
   '3h'?: number;
 }
 
+interface Snow {
+  '3h'?: number;
+}
+
 interface Sys {
   pod: string;
 }
@@ -69,9 +73,9 @@ interface Main {
 }
 
 /**
- * 
+ * Aggregated forecast 1 set of data/day
  */
-interface LongForecastJson {
+interface AggrForecastJson {
   cod: string;
   message: number;
   cnt: number;
@@ -90,6 +94,10 @@ interface List {
 }
 
 interface Rain {
+  '3h'?: number;
+}
+
+interface Snow {
   '3h'?: number;
 }
 
@@ -114,6 +122,7 @@ interface Main {
   temp_min: number;
   temp_max: number;
   pressure: number;
+  sea_level: number;
+  grnd_level: number;
   humidity: number;
-  temp_kf: number;
 }
