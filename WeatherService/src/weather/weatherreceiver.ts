@@ -28,11 +28,11 @@ export class WeatherReceiver implements IWeatherReceiver{
     //
     //Mqtt client
     private mqttClient: MqttClient
-    private temperatureTopic: string = this.handler.config.weather.temperaturetopic
-    private pressureTopic: string = this.handler.config.weather.pressuretopic
-    private humidityTopic: string = this.handler.config.weather.humiditytopic
-    private windSpeedTopic: string = this.handler.config.weather.windspeedtopic
-    private windDegTopic: string = this.handler.config.weather.winddegtopic
+    private temperatureTopic: string = this.handler.config.weathertopicsget.temperature
+    private pressureTopic: string = this.handler.config.weathertopicsget.pressure
+    private humidityTopic: string = this.handler.config.weathertopicsget.humidity
+    private windSpeedTopic: string = this.handler.config.weathertopicsget.windspeed
+    private windDegTopic: string = this.handler.config.weathertopicsget.winddeg
 
     /**
      * true/false : internal weather is/is not available
@@ -46,7 +46,7 @@ export class WeatherReceiver implements IWeatherReceiver{
         this.mqttClient = mqttClient
         this.cycleDuration = -1
         this.sendWeather = this.dummyFunc
-        this.makeSubscriptions()
+        //this.makeSubscriptions()
     }
     
     /**

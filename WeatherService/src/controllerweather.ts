@@ -5,10 +5,16 @@ import { Weather } from './entities';
 import { ForecastReceiver } from './forecast/forecastreceiver';
 
 let mqttClient: MqttClient
+let forecasttopicaggregated: string
+let forecasttopicfull: string
+
 
 export function setup(){
     
-    let confighandler = Confighandler.Instance
+    let handler = Confighandler.Instance
+    forecasttopicfull = handler.config.forecasttopicssend.full
+    forecasttopicaggregated = handler.config.forecasttopicssend.aggregated
+
     let second = 1000
     let hour = 60 * 60 * 1000
 
@@ -43,9 +49,9 @@ function getWeather(weather: Weather): boolean {
     return true;
 }
 
-function getForecast(forecast: ForecastJson): boolean {
+function getForecast(forecast: ForecastJson, aggregatedforecast: AggrForecastJson): boolean {
     console.log(`Forecast arrived: ${JSON.stringify(forecast).substring(0, 40)}...`)
-    mqttClient.send("htlleonding/outdoor/weather/forecast", JSON.stringify(forecast))
+    mqttClient.send(forecasttopicfull, JSON.stringify(forecast))
     return true;
 }
 

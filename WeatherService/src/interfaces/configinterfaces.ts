@@ -2,15 +2,30 @@ interface ConfigJson {
   mqttclient: Mqttclient;
   forecastreceiver: Forecastreceiver;
   weatherreceiver: Forecastreceiver;
-  weather: Weather;
+  weathertopicsget: WeatherTopicsGet;
+  weathertopicssend: WeatherTopicsSend;
+  forecasttopicssend: ForecastTopicsSend;
 }
 
-interface Weather {
-  temperaturetopic: string;
-  pressuretopic: string;
-  humiditytopic: string;
-  windspeedtopic: string;
-  winddegtopic: string;
+interface WeatherTopicsGet {
+  temperature: string;
+  pressure: string;
+  humidity: string;
+  windspeed: string;
+  winddeg: string;
+}
+
+interface WeatherTopicsSend {
+  temperature: string;
+  pressure: string;
+  humidity: string;
+  windspeed: string;
+  winddeg: string;
+}
+
+interface ForecastTopicsSend {
+  full: string;
+  aggregated: string;
 }
 
 interface Forecastreceiver {

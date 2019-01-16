@@ -5,8 +5,12 @@ const config_1 = require("./config/config");
 const weatherreceiver_1 = require("./weather/weatherreceiver");
 const forecastreceiver_1 = require("./forecast/forecastreceiver");
 let mqttClient;
+let forecasttopicaggregated;
+let forecasttopicfull;
 function setup() {
-    let confighandler = config_1.Confighandler.Instance;
+    let handler = config_1.Confighandler.Instance;
+    forecasttopicfull = handler.config.forecasttopicssend.full;
+    forecasttopicaggregated = handler.config.forecasttopicssend.aggregated;
     let second = 1000;
     let hour = 60 * 60 * 1000;
     mqttClient = mqttclient_1.MqttClient.Instance;
@@ -32,9 +36,9 @@ function getWeather(weather) {
     updateWeather(weather);
     return true;
 }
-function getForecast(forecast) {
+function getForecast(forecast, aggregatedforecast) {
     console.log(`Forecast arrived: ${JSON.stringify(forecast).substring(0, 40)}...`);
-    mqttClient.send("htlleonding/outdoor/weather/forecast", JSON.stringify(forecast));
+    mqttClient.send(forecasttopicfull, JSON.stringify(forecast));
     return true;
 }
 function updateWeather(weather) {

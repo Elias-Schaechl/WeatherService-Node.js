@@ -30,7 +30,7 @@ interface List {
   sys: Sys;
   dt_txt: string;
   rain?: Rain;
-  snow?: Rain;
+  snow?: Snow;
 }
 
 interface Rain {
@@ -79,45 +79,24 @@ interface AggrForecastJson {
   cod: string;
   message: number;
   cnt: number;
-  list: List[];
+  list: ForecastListElement[];
 }
 
-interface List {
+interface ForecastListElement {
   dt: number;
-  main: Main;
-  weather: Weather[];
-  clouds: Clouds;
+  main: MainData;
+  weather_id: number;
+  werather_main: string;
+  weather_description: string;
+  weather_icon: string;
+  clouds: number;
   wind: Wind;
   dt_txt: string;
-  rain?: Rain;
-  snow?: Rain;
+  rain?: number;
+  snow?: number;
 }
 
-interface Rain {
-  '3h'?: number;
-}
-
-interface Snow {
-  '3h'?: number;
-}
-
-interface Wind {
-  speed: number;
-  deg: number;
-}
-
-interface Clouds {
-  all: number;
-}
-
-interface Weather {
-  id: number;
-  main: string;
-  description: string;
-  icon: string;
-}
-
-interface Main {
+interface MainData {
   temp: number;
   temp_min: number;
   temp_max: number;

@@ -18,11 +18,11 @@ class WeatherReceiver {
         this.cycleActive = false;
         this.cycle = setInterval(() => { this.dummyFunc; }, 0);
         this.lastWeather = new entities_1.Weather(0, 0, 0, 0, 0, 0);
-        this.temperatureTopic = this.handler.config.weather.temperaturetopic;
-        this.pressureTopic = this.handler.config.weather.pressuretopic;
-        this.humidityTopic = this.handler.config.weather.humiditytopic;
-        this.windSpeedTopic = this.handler.config.weather.windspeedtopic;
-        this.windDegTopic = this.handler.config.weather.winddegtopic;
+        this.temperatureTopic = this.handler.config.weathertopicsget.temperature;
+        this.pressureTopic = this.handler.config.weathertopicsget.pressure;
+        this.humidityTopic = this.handler.config.weathertopicsget.humidity;
+        this.windSpeedTopic = this.handler.config.weathertopicsget.windspeed;
+        this.windDegTopic = this.handler.config.weathertopicsget.winddeg;
         /**
          * true/false : internal weather is/is not available
          */
@@ -31,7 +31,7 @@ class WeatherReceiver {
         this.mqttClient = mqttClient;
         this.cycleDuration = -1;
         this.sendWeather = this.dummyFunc;
-        this.makeSubscriptions();
+        //this.makeSubscriptions()
     }
     /**
      * Sets a new intervall for requests

@@ -123,18 +123,64 @@ class ForecastReceiver {
         this.sendForecast(forecastJson, aggrForecastJson);
     }
     aggregateForecast(forecastJson) {
-        let aggrForecastJson = forecastJson;
-        let daycdt = 0;
-        let oldList = aggrForecastJson.list;
+        let aggrForecastJson = {
+            cod: forecastJson.cod,
+            message: forecastJson.message,
+            cnt: 0,
+            list: []
+        };
+        let oldList = forecastJson.list;
         let firstDate = new Date(oldList[0].dt_txt);
-        console.log(firstDate);
-        console.log(firstDate.getHours());
-        console.log(oldList[0].dt_txt);
-        let scipCnt = (24 - firstDate.getHours()) / 3;
+        let scipCnt = (24 - firstDate.getHours()) / 3 - 1;
+        if (scipCnt == 8)
+            scipCnt = 0;
         console.log(scipCnt);
-        //for( var i = 0; i < oldList.length; i++){
-        //    if(i < 5)
-        //}
+        let newList = [];
+        for (var i = scipCnt; i < oldList.length - 8; i += 8) {
+            let temp = 0;
+            let mintemp;
+            let maxtemp;
+            let pressure = 0;
+            let pressuregrnd = 0;
+            let pressuresea = 0;
+            let humidity = 0;
+            let clouds = 0;
+            let windspeed = 0;
+            let winddeg = 0;
+            let rain = 0;
+            let snow = 0;
+            for (var j = i; j < i + 8; j++) {
+                temp += oldList[i].main.temp / 8;
+            }
+            var listMain = {
+                temp: temp,
+                temp_min: 0,
+                temp_max: 0,
+                pressure: 0,
+                sea_level: 0,
+                grnd_level: 0,
+                humidity: 0
+            };
+            var wind = {
+                speed: 0,
+                deg: 0
+            };
+            var newElement = {
+                dt: 0,
+                main: listMain,
+                weather_id: 0,
+                werather_main: "",
+                weather_description: "",
+                weather_icon: "",
+                clouds: 0,
+                wind: wind,
+                dt_txt: "string",
+                rain: 0,
+                snow: 0
+            };
+            newList.push(newElement);
+        }
+        aggrForecastJson.list = newList;
         return aggrForecastJson;
     }
     /**

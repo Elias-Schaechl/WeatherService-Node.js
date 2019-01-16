@@ -133,15 +133,20 @@ export class ForecastReceiver implements IForecastReceiver{
     }
 
     private aggregateForecast(forecastJson: ForecastJson): any {
-        let aggrForecastJson: AggrForecastJson = forecastJson
-        let oldList = aggrForecastJson.list
+        let aggrForecastJson: AggrForecastJson = {
+            cod: forecastJson.cod,
+            message: forecastJson.message,
+            cnt: 0,
+            list: []
+        }
+        let oldList = forecastJson.list
         let firstDate = new Date(oldList[0].dt_txt)
         let scipCnt: number = (24 - firstDate.getHours())/3 -1
         if(scipCnt == 8) scipCnt = 0
 
         console.log(scipCnt)
 
-        let newList: List[] = []
+        let newList: ForecastListElement[] = []
 
         for( var i = scipCnt; i < oldList.length - 8; i += 8){
             
@@ -166,24 +171,33 @@ export class ForecastReceiver implements IForecastReceiver{
 
             }
 
-            var listMain: Main = {
-
+            var listMain: MainData = {
+                temp: temp,
+                temp_min: 0,
+                temp_max: 0,
+                pressure: 0,
+                sea_level: 0,
+                grnd_level: 0,
+                humidity: 0
             }
 
-            var newElement: List = {
+            var wind: Wind = {
+                speed: 0,
+                deg: 0
+            }
+
+            var newElement: ForecastListElement = {
                 dt: 0,
                 main: listMain,
-                weather: [
-                    id: 0,
-                    main: "",
-                    description: "",
-                    icon: ""
-                ],
-                clouds: Clouds;
-                wind: Wind;
+                weather_id: 0,
+                werather_main: "",
+                weather_description: "",
+                weather_icon: "",
+                clouds: 0,
+                wind: wind,
                 dt_txt: "string",
-                rain?: Rain;
-                snow?: Rain;
+                rain: 0,
+                snow: 0
             }
             newList.push(newElement)
 
