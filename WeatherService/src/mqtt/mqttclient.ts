@@ -60,7 +60,7 @@ export class MqttClient {
     }
 
     send(topic: string, message: string) {
-        this.client.publish(topic, message)
+        this.client.publish(topic, message,{ retain:true, qos:2})
     }
 
     sampleTopic(topic: string, message: string){

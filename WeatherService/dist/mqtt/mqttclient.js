@@ -48,7 +48,11 @@ class MqttClient {
         console.log(this.subscriptions);
     }
     send(topic, message) {
-        this.client.publish(topic, message);
+        let options = {
+            retain: true,
+            qos: 2
+        };
+        this.client.publish(topic, message, { retain: true, qos: 2 });
     }
     sampleTopic(topic, message) {
     }
