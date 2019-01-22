@@ -38,7 +38,7 @@ export class Weather{
         this.temperature = temperature
         this.pressure = pressure
         this.humidity = humidity
-        this.windspeed = windspeed
+        this.windspeed = windspeed * 3.6
         this.winddir = winddir        
     }
     
@@ -49,6 +49,6 @@ export class Unit{
     readonly temperature: string = "°C"
     readonly pressure: string = "%"
     readonly humidity: string = "hPa"
-    readonly windspeed: string = "m/s"
+    readonly windspeed: string = "km/h"
     readonly winddir: string = "°"
 }

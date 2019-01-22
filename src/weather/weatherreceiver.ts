@@ -206,7 +206,7 @@ export class WeatherReceiver implements IWeatherReceiver{
         //console.info("onWeatherRecieved ran...")
         //console.debug(weatherString)
         let weather = this.formatWeather(weatherJson)
-        //console.debug(`Result weather: \n${JSON.stringify(weather)}`)
+        console.debug(`Result weather: \n${JSON.stringify(weather)}`)
         if(this.lastWeather.Equals(weather)){
             console.info(`No change in weather: ${weather.timestamp}`)
             return

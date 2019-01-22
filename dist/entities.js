@@ -12,7 +12,7 @@ class Weather {
         this.temperature = temperature;
         this.pressure = pressure;
         this.humidity = humidity;
-        this.windspeed = windspeed;
+        this.windspeed = windspeed * 3.6;
         this.winddir = winddir;
     }
     Equals(other) {
@@ -47,7 +47,7 @@ class Unit {
         this.temperature = "°C";
         this.pressure = "%";
         this.humidity = "hPa";
-        this.windspeed = "m/s";
+        this.windspeed = "km/h";
         this.winddir = "°";
     }
 }
