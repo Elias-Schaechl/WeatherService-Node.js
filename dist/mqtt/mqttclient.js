@@ -41,7 +41,7 @@ class MqttClient {
         this.client.publish(topic, message, { retain: true, qos: 2 });
     }
     onConnect() {
-        console.log(`Now connected to Broker`);
+        console.log(`MQTT connection established`);
     }
     onMessage(topic, message) {
         console.log(this.subscriptions);

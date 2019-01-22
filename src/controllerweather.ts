@@ -6,13 +6,13 @@ import { WeatherReceiver } from "./weather/weatherreceiver"
 
 let mqttClient: MqttClient
 
-var forecasttopicaggregated: string
-var forecasttopicfull: string
-var temperaturetopicsend: string
-var pressuretopicsend: string
-var humiditytopicsend: string
-var windspeedtopicsend: string
-var winddegtopicsend: string
+let forecasttopicaggregated: string
+let forecasttopicfull: string
+let temperaturetopicsend: string
+let pressuretopicsend: string
+let humiditytopicsend: string
+let windspeedtopicsend: string
+let winddegtopicsend: string
 
 export function setup() {
 
@@ -24,10 +24,9 @@ export function setup() {
     humiditytopicsend = handler.config.weathertopicssend.humidity
     windspeedtopicsend = handler.config.weathertopicssend.windspeed
     winddegtopicsend = handler.config.weathertopicssend.winddeg 
-    console.log(temperaturetopicsend)
-    console.log(pressuretopicsend)
+
     const second = 1000
-    const hour = 60 * 60 * 1000
+    const hour = 60 * 60 * second
 
     mqttClient = MqttClient.Instance
 

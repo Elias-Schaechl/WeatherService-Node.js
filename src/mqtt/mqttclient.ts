@@ -44,7 +44,7 @@ export class MqttClient {
     }
 
     private onConnect() {
-        console.log(`Now connected to Broker`)
+        console.log(`MQTT connection established`)
     }
 
     private onMessage(topic: string, message: string): void {
