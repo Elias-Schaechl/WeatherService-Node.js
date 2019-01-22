@@ -8,6 +8,8 @@ export class MqttClient {
     }
 
     private static instance: MqttClient
+
+    public subscriptions = new Set()
     private handler: Confighandler = Confighandler.Instance
     private readonly url: string = this.handler.config.mqttclient.url
     private readonly port: string = this.handler.config.mqttclient.port
@@ -20,14 +22,12 @@ export class MqttClient {
 
     private readonly will = {topic: this.wtopic, payload: this.wpayload, qos: this.wqos, retain: this.wretain}
     private readonly connectionOptions = {username: this.username, password: this.password, lastwill: this.will}
-
-    private subscriptions = new Set()
     private client: mqtt.Client
 
     private constructor() {
         console.log("MqttClient constructor()...")
+        console.log(`Connecting to ${this.url}:${this.port}`)
         this.client = mqtt.connect(`${this.url}:${this.port}`, this.connectionOptions)
-
         this.client.on("connect", this.onConnect)
         this.client.on("message", this.onMessage)
     }
@@ -35,7 +35,7 @@ export class MqttClient {
     public subscribe(topic: string, target: (topic: string, message: string) => void) {
         this.client.subscribe(topic)
         this.subscriptions.add({"topic": topic, "onMessage": target})
-        console.log (this.subscriptions)
+        // console.log (this.subscriptions)
 
     }
 

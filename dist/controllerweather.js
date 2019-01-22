@@ -5,12 +5,24 @@ const forecastreceiver_1 = require("./forecast/forecastreceiver");
 const mqttclient_1 = require("./mqtt/mqttclient");
 const weatherreceiver_1 = require("./weather/weatherreceiver");
 let mqttClient;
-let forecasttopicaggregated;
-let forecasttopicfull;
+var forecasttopicaggregated;
+var forecasttopicfull;
+var temperaturetopicsend;
+var pressuretopicsend;
+var humiditytopicsend;
+var windspeedtopicsend;
+var winddegtopicsend;
 function setup() {
     const handler = config_1.Confighandler.Instance;
     forecasttopicfull = handler.config.forecasttopicssend.full;
     forecasttopicaggregated = handler.config.forecasttopicssend.aggregated;
+    temperaturetopicsend = handler.config.weathertopicssend.temperature;
+    pressuretopicsend = handler.config.weathertopicssend.pressure;
+    humiditytopicsend = handler.config.weathertopicssend.humidity;
+    windspeedtopicsend = handler.config.weathertopicssend.windspeed;
+    winddegtopicsend = handler.config.weathertopicssend.winddeg;
+    console.log(temperaturetopicsend);
+    console.log(pressuretopicsend);
     const second = 1000;
     const hour = 60 * 60 * 1000;
     mqttClient = mqttclient_1.MqttClient.Instance;
@@ -43,23 +55,23 @@ function getForecast(forecast, aggregatedforecast) {
 }
 function updateWeather(weather) {
     if (weather.changed[0]) {
-        sendMessage("htlleonding/outdoor/weather/actual/temperature", weather.timestamp, weather.temperature);
+        sendMessage(temperaturetopicsend, weather.timestamp, weather.temperature);
         weather.changed[0] = false;
     }
     if (weather.changed[1]) {
-        sendMessage("htlleonding/outdoor/weather/actual/pressure", weather.timestamp, weather.pressure);
+        sendMessage(pressuretopicsend, weather.timestamp, weather.pressure);
         weather.changed[1] = false;
     }
     if (weather.changed[2]) {
-        sendMessage("htlleonding/outdoor/weather/actual/humidity", weather.timestamp, weather.humidity);
+        sendMessage(humiditytopicsend, weather.timestamp, weather.humidity);
         weather.changed[2] = false;
     }
     if (weather.changed[3]) {
-        sendMessage("htlleonding/outdoor/weather/actual/wind_speed", weather.timestamp, weather.windspeed);
+        sendMessage(windspeedtopicsend, weather.timestamp, weather.windspeed);
         weather.changed[3] = false;
     }
     if (weather.changed[4]) {
-        sendMessage("htlleonding/outdoor/weather/actual/wind_deg", weather.timestamp, weather.winddir);
+        sendMessage(winddegtopicsend, weather.timestamp, weather.winddir);
         weather.changed[4] = false;
     }
 }

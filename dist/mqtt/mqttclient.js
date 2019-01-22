@@ -11,6 +11,7 @@ const mqtt = __importStar(require("mqtt"));
 const config_1 = require("./../config/config");
 class MqttClient {
     constructor() {
+        this.subscriptions = new Set();
         this.handler = config_1.Confighandler.Instance;
         this.url = this.handler.config.mqttclient.url;
         this.port = this.handler.config.mqttclient.port;
@@ -22,8 +23,8 @@ class MqttClient {
         this.wretain = this.handler.config.mqttclient.wretain;
         this.will = { topic: this.wtopic, payload: this.wpayload, qos: this.wqos, retain: this.wretain };
         this.connectionOptions = { username: this.username, password: this.password, lastwill: this.will };
-        this.subscriptions = new Set();
         console.log("MqttClient constructor()...");
+        console.log(`Connecting to ${this.url}:${this.port}`);
         this.client = mqtt.connect(`${this.url}:${this.port}`, this.connectionOptions);
         this.client.on("connect", this.onConnect);
         this.client.on("message", this.onMessage);
@@ -34,7 +35,7 @@ class MqttClient {
     subscribe(topic, target) {
         this.client.subscribe(topic);
         this.subscriptions.add({ "topic": topic, "onMessage": target });
-        console.log(this.subscriptions);
+        // console.log (this.subscriptions)
     }
     send(topic, message) {
         this.client.publish(topic, message, { retain: true, qos: 2 });
