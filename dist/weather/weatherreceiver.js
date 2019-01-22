@@ -3,16 +3,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const entities_1 = require("../entities");
 const axios_1 = __importDefault(require("axios"));
 const config_1 = require("../config/config");
+const entities_1 = require("../entities");
 class WeatherReceiver {
     constructor(mqttClient) {
         //
-        //Instance of Confighandler
+        // Instance of Confighandler
         this.handler = config_1.Confighandler.Instance;
         //
-        //Api connection fields
+        // Api connection fields
         this.baseUrl = this.handler.config.weatherreceiver.baseUrl;
         this.query = this.handler.config.weatherreceiver.query;
         this.cycleActive = false;
@@ -31,7 +31,7 @@ class WeatherReceiver {
         this.mqttClient = mqttClient;
         this.cycleDuration = -1;
         this.sendWeather = this.dummyFunc;
-        //this.makeSubscriptions()
+        // this.makeSubscriptions()
     }
     /**
      * Sets a new intervall for requests
@@ -39,7 +39,7 @@ class WeatherReceiver {
      * @returns If the action was successful
      */
     setCycleDuration(intervall) {
-        //console.info("setCycleDuration ran...")
+        // console.info("setCycleDuration ran...")
         if (intervall == null)
             return false;
         if (intervall <= 0)
@@ -55,7 +55,7 @@ class WeatherReceiver {
      * @returns If the action was successful
      */
     triggerSending() {
-        //console.info("triggerSending ran...")
+        // console.info("triggerSending ran...")
         throw new Error("Method not implemented.");
     }
     /**
@@ -63,7 +63,7 @@ class WeatherReceiver {
      * @param target The function which is to be called
      */
     setReceiveFunction(target) {
-        //console.info("setRecieveFunction ran...")
+        // console.info("setRecieveFunction ran...")
         if (target == null)
             return false;
         this.sendWeather = target;
@@ -74,8 +74,8 @@ class WeatherReceiver {
      * @param status Which action is to bee performed
      */
     setCycleActive(status) {
-        //console.info("setCycleActive ran...")
-        if (this.cycleActive == status)
+        // console.info("setCycleActive ran...")
+        if (this.cycleActive === status)
             return false;
         if (status) {
             this.startCycle();
@@ -94,35 +94,35 @@ class WeatherReceiver {
         this.mqttClient.subscribe(this.windDegTopic, this.onNewWindDeg);
     }
     onNewTemperature(topic, message) {
-        if (this.lastWeather.temperature != +message) {
+        if (this.lastWeather.temperature !== +message) {
             this.lastWeather.temperature = +message;
             this.lastWeather.changed[0] = true;
             this.sendWeather(this.lastWeather);
         }
     }
     onNewPressure(topic, message) {
-        if (this.lastWeather.pressure != +message) {
+        if (this.lastWeather.pressure !== +message) {
             this.lastWeather.pressure = +message;
             this.lastWeather.changed[1] = true;
             this.sendWeather(this.lastWeather);
         }
     }
     onNewHumidity(topic, message) {
-        if (this.lastWeather.humidity != +message) {
+        if (this.lastWeather.humidity !== +message) {
             this.lastWeather.humidity = +message;
             this.lastWeather.changed[2] = true;
             this.sendWeather(this.lastWeather);
         }
     }
     onNewWindSpeed(topic, message) {
-        if (this.lastWeather.windspeed != +message) {
+        if (this.lastWeather.windspeed !== +message) {
             this.lastWeather.windspeed = +message;
             this.lastWeather.changed[3] = true;
             this.sendWeather(this.lastWeather);
         }
     }
     onNewWindDeg(topic, message) {
-        if (this.lastWeather.winddir != +message) {
+        if (this.lastWeather.winddir !== +message) {
             this.lastWeather.winddir = +message;
             this.lastWeather.changed[4] = true;
             this.sendWeather(this.lastWeather);
@@ -139,14 +139,14 @@ class WeatherReceiver {
         this.getWeather();
         this.cycle = setInterval(() => { this.getWeather(); }, this.cycleDuration);
         this.cycleActive = true;
-        //console.info("startCycle ran...")
+        // console.info("startCycle ran...")
         return true;
     }
     /**
      * Stop cycle
      */
     stopCycle() {
-        //console.info("stopCycle ran...")
+        // console.info("stopCycle ran...")
         clearTimeout(this.cycle);
         return true;
     }
@@ -155,20 +155,20 @@ class WeatherReceiver {
      * @returns Url
      */
     getUrl() {
-        //console.info("getUrl ran...")
+        // console.info("getUrl ran...")
         const url = this.baseUrl + this.query;
         return url;
     }
     async getWeather() {
-        //console.info("getWeather ran...")
+        // console.info("getWeather ran...")
         if (this.sourceMode) {
         }
         else {
-            let responseData = await this.sendHTTPRequest();
-            if (responseData == "")
+            const responseData = await this.sendHTTPRequest();
+            if (responseData === "")
                 return false;
             try {
-                let weatherJson = JSON.parse(JSON.stringify(responseData));
+                const weatherJson = JSON.parse(JSON.stringify(responseData));
                 this.onWeatherReceived(weatherJson);
             }
             catch (error) {
@@ -180,10 +180,10 @@ class WeatherReceiver {
         }
     }
     onWeatherReceived(weatherJson) {
-        //console.info("onWeatherRecieved ran...")
-        //console.debug(weatherString)
-        let weather = this.formatWeather(weatherJson);
-        console.debug(`Result weather: \n${JSON.stringify(weather)}`);
+        // console.info("onWeatherRecieved ran...")
+        // console.debug(weatherString)
+        const weather = this.formatWeather(weatherJson);
+        // console.debug(`Result weather: \n${JSON.stringify(weather)}`)
         if (this.lastWeather.Equals(weather)) {
             console.info(`No change in weather: ${weather.timestamp}`);
             return;
@@ -194,32 +194,32 @@ class WeatherReceiver {
         }
     }
     formatWeather(weatherJson) {
-        //console.info("formatWeather ran...")
+        // console.info("formatWeather ran...")
         return new entities_1.Weather(Date.now(), Math.round(weatherJson.main.temp - 273.15), weatherJson.main.pressure, weatherJson.main.humidity, weatherJson.wind.speed, weatherJson.wind.deg);
     }
     checkWeather() {
-        //console.info("checkWeather ran...")
+        // console.info("checkWeather ran...")
     }
     /**
      * Sends a HTTP requesr to weather api
      * @returns returns the response as a string
      */
     async sendHTTPRequest() {
-        //console.info("sendHTTPRequest ran...")
-        let res = "";
-        let url = this.getUrl();
+        // console.info("sendHTTPRequest ran...")
+        const res = "";
+        const url = this.getUrl();
         try {
-            let response = await axios_1.default.get(url);
+            const response = await axios_1.default.get(url);
             return response.data;
         }
         catch (error) {
             console.error("Error at weather http request!");
             return "";
         }
-        //console.debug(url) 
+        // console.debug(url)
     }
     dummyFunc(w) {
-        //console.info("dummyFunc ran...")
+        // console.info("dummyFunc ran...")
         return false;
     }
 }

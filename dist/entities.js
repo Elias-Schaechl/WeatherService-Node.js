@@ -18,23 +18,23 @@ class Weather {
     Equals(other) {
         this.changed.fill(false);
         let equal = true;
-        if (this.temperature != other.temperature) {
+        if (this.temperature !== other.temperature) {
             equal = false;
             this.changed[0] = true;
         }
-        if (this.pressure != other.pressure) {
+        if (this.pressure !== other.pressure) {
             equal = false;
             this.changed[1] = true;
         }
-        if (this.humidity != other.humidity) {
+        if (this.humidity !== other.humidity) {
             equal = false;
             this.changed[2] = true;
         }
-        if (this.windspeed != other.windspeed) {
+        if (this.windspeed !== other.windspeed) {
             equal = false;
             this.changed[3] = true;
         }
-        if (this.winddir != other.winddir) {
+        if (this.winddir !== other.winddir) {
             equal = false;
             this.changed[4] = true;
         }
@@ -42,6 +42,7 @@ class Weather {
     }
 }
 exports.Weather = Weather;
+// tslint:disable-next-line: max-classes-per-file
 class Unit {
     constructor() {
         this.temperature = "°C";

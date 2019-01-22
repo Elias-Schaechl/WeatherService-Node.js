@@ -1,36 +1,34 @@
-import { MqttClient } from './mqtt/mqttclient';
-import { Confighandler } from './config/config'
-import { WeatherReceiver } from './weather/weatherreceiver'
-import { Weather } from './entities';
-import { ForecastReceiver } from './forecast/forecastreceiver';
+import { Confighandler } from "./config/config"
+import { Weather } from "./entities"
+import { ForecastReceiver } from "./forecast/forecastreceiver"
+import { MqttClient } from "./mqtt/mqttclient"
+import { WeatherReceiver } from "./weather/weatherreceiver"
 
 let mqttClient: MqttClient
 let forecasttopicaggregated: string
 let forecasttopicfull: string
 
+export function setup() {
 
-export function setup(){
-    
-    let handler = Confighandler.Instance
+    const handler = Confighandler.Instance
     forecasttopicfull = handler.config.forecasttopicssend.full
     forecasttopicaggregated = handler.config.forecasttopicssend.aggregated
 
-    let second = 1000
-    let hour = 60 * 60 * 1000
+    const second = 1000
+    const hour = 60 * 60 * 1000
 
     mqttClient = MqttClient.Instance
 
-    let weatherReceiver = new WeatherReceiver(mqttClient)
-    let forecastReceiver = new ForecastReceiver()
+    const weatherReceiver = new WeatherReceiver(mqttClient)
+    const forecastReceiver = new ForecastReceiver()
 
     weatherReceiver.setReceiveFunction(getWeather)
     weatherReceiver.setCycleDuration(20 * second)
-    weatherReceiver.setCycleActive
-
+    weatherReceiver.setCycleActive(true)
 
     forecastReceiver.setReceiveFunction(getForecast)
     forecastReceiver.setCycleDuration(1 * hour)
-    forecastReceiver.setCycleActive
+    forecastReceiver.setCycleActive(true)
 
     mqttClient.subscribe("htlleonding/weather", onMessage)
     mqttClient.subscribe("htlleonding/weather/test", onMessage)
@@ -39,20 +37,20 @@ export function setup(){
     console.log("Awaiting data:\n")
 }
 
-function onMessage(topic: string, message: string){
+function onMessage(topic: string, message: string) {
     console.log(`${topic}: ${message}`)
 }
 
 function getWeather(weather: Weather): boolean {
-    console.log('\x1b[32m', `New Weather Data arrived: \x1b[0m${JSON.stringify(weather)}`)
+    console.log("\x1b[32m", `New Weather Data arrived: \x1b[0m${JSON.stringify(weather)}`)
     updateWeather(weather)
-    return true;
+    return true
 }
 
 function getForecast(forecast: ForecastJson, aggregatedforecast: AggrForecastJson): boolean {
     console.log(`Forecast arrived: ${JSON.stringify(forecast).substring(0, 40)}...`)
     mqttClient.send(forecasttopicfull, JSON.stringify(forecast))
-    return true;
+    return true
 }
 
 function updateWeather(weather: Weather) {
@@ -79,5 +77,5 @@ function updateWeather(weather: Weather) {
 }
 
 function sendMessage(topic: string, timestamp: number, value: number) {
-    mqttClient.send(topic, JSON.stringify({ timestamp: (timestamp - (timestamp % 1000)) / 1000, value: value }))
+    mqttClient.send(topic, JSON.stringify({ timestamp: (timestamp - (timestamp % 1000)) / 1000, value }))
 }

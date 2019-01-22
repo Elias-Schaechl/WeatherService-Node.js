@@ -7,8 +7,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const config_1 = require("./../config/config");
 const mqtt = __importStar(require("mqtt"));
+const config_1 = require("./../config/config");
 class MqttClient {
     constructor() {
         this.handler = config_1.Confighandler.Instance;
@@ -25,22 +25,11 @@ class MqttClient {
         this.subscriptions = new Set();
         console.log("MqttClient constructor()...");
         this.client = mqtt.connect(`${this.url}:${this.port}`, this.connectionOptions);
-        this.client.on('connect', this.onConnect);
-        this.client.on('message', this.onMessage);
+        this.client.on("connect", this.onConnect);
+        this.client.on("message", this.onMessage);
     }
     static get Instance() {
-        return this._instance || (this._instance = new this());
-    }
-    onConnect() {
-        console.log(`Now connected to Broker`);
-    }
-    onMessage(topic, message) {
-        console.log(this.subscriptions);
-        this.subscriptions.forEach(function (subscription) {
-            if (topic == subscription.topic) {
-                subscription.onMessage(topic, message);
-            }
-        });
+        return this.instance || (this.instance = new this());
     }
     subscribe(topic, target) {
         this.client.subscribe(topic);
@@ -50,7 +39,16 @@ class MqttClient {
     send(topic, message) {
         this.client.publish(topic, message, { retain: true, qos: 2 });
     }
-    sampleTopic(topic, message) {
+    onConnect() {
+        console.log(`Now connected to Broker`);
+    }
+    onMessage(topic, message) {
+        console.log(this.subscriptions);
+        this.subscriptions.forEach((subscription) => {
+            if (topic === subscription.topic) {
+                subscription.onMessage(topic, message);
+            }
+        });
     }
 }
 exports.MqttClient = MqttClient;

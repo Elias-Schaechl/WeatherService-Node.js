@@ -1,24 +1,19 @@
-import fs from "fs";
+import fs from "fs"
 
-export class Confighandler{
+export class Confighandler {
 
-    private static _instance: Confighandler;
+    public static get Instance() {
+        return this._instance || (this._instance = new this())
+    }
+
+    private static _instance: Confighandler
+    public readonly config: ConfigJson
     private path: string = "config.json"
-    readonly config: ConfigJson
 
-    private constructor(){
+    private constructor() {
         console.log("Confighandler constructor()...")
-        let rawdata = fs.readFileSync(this.path)
+        const rawdata = fs.readFileSync(this.path)
         this.config = JSON.parse(rawdata.toString())
-        //console.log(JSON.stringify(this.config))
+        // console.log(JSON.stringify(this.config))
     }
-
-    public static get Instance()
-    {
-        return this._instance || (this._instance = new this());
-    }
-    
-
-
-
 }

@@ -1,3 +1,3 @@
-class MonitorController{
+class MonitorController {
 
 }
