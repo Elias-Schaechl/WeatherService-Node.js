@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = __importDefault(require("fs"));
 class Confighandler {
     constructor() {
-        this.path = "config.json";
+        this.path = "config-localtest.json";
         console.log("Confighandler constructor()...");
         const rawdata = fs_1.default.readFileSync(this.path);
         this.config = JSON.parse(rawdata.toString());

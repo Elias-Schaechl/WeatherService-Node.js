@@ -12,7 +12,7 @@ class Weather {
         this.temperature = temperature;
         this.pressure = pressure;
         this.humidity = humidity;
-        this.windspeed = Math.round(windspeed * 3.6);
+        this.windspeed = Math.round(windspeed * 3.6 * 10) / 10;
         this.winddir = winddir;
     }
     Equals(other) {

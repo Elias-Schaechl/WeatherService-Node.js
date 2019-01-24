@@ -184,7 +184,7 @@ class WeatherReceiver {
         // console.debug(weatherString)
         const weather = this.formatWeather(weatherJson);
         // console.debug(`Result weather: \n${JSON.stringify(weather)}`)
-        if (this.lastWeather.Equals(weather)) {
+        if (weather.Equals(this.lastWeather)) {
             console.info(`No change in weather: ${weather.timestamp}`);
             return;
         }
