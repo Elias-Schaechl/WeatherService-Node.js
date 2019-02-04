@@ -11,7 +11,7 @@
     }, 
     "forecastreceiver": {
         "baseUrl": "https://api.openweathermap.org/data/", 
-        "query": "2.5/forecast?q=Leonding,at&unit=metric&count=16&appid=5cb2b2fa61fa541e7b13255fc29d5c61"
+        "query": "2.5/forecast?q=Leonding,at&units=metric&count=16&appid=5cb2b2fa61fa541e7b13255fc29d5c61"
     }, 
     "weatherreceiver": {
         "baseUrl": "https://api.openweathermap.org/data/", 

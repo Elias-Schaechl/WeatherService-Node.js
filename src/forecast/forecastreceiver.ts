@@ -148,48 +148,64 @@ export class ForecastReceiver implements IForecastReceiver {
         for ( let i = scipCnt; i < oldList.length - 8; i += 8) {
 
             let temp: number = 0
-            let mintemp: number
-            let maxtemp: number
-            const pressure: number = 0
-            const pressuregrnd: number = 0
-            const pressuresea: number = 0
-            const humidity: number = 0
-            const clouds: number = 0
-            const windspeed: number = 0
-            const winddeg: number = 0
-            const rain: number = 0
-            const snow: number = 0
+            let temp_min: number = 100
+            let temp_max: number = -100
+            let pressure: number = 0
+            let pressuregrnd: number = 0
+            let pressuresea: number = 0
+            let humidity: number = 0
+            let clouds: number = 0
+            let windspeed: number = 0
+            let winddeg: number = 0
+            let rain: number = 0
+            let snow: number = 0
 
             for ( let j = i; j < i + 8; j++) {
-                temp += oldList[i].main.temp / 8
+                const weatherListElement = oldList[j]
+                const weatherMain = weatherListElement.main
+                temp += (weatherMain.temp / 8)
+                pressure += (weatherMain.pressure / 8)
+                pressuregrnd += (weatherMain.grnd_level / 8)
+                pressuresea += (weatherMain.sea_level / 8)
+                humidity += (weatherMain.humidity / 8)
+                windspeed += (weatherListElement.wind.speed / 8)
+                clouds += (weatherListElement.clouds.all / 8)
+                if (temp_min > weatherMain.temp_min) {
+                    temp_min = weatherMain.temp_min
+                }
+                if (temp_max < weatherMain.temp_max) {
+                    temp_max = weatherMain.temp_max
+                }
+                //console.log("LoopLog: " + temp)
+                //console.log(oldList[i].main.temp)
 
             }
 
             const listMain: MainData = {
                 temp,
-                temp_min: 0,
-                temp_max: 0,
-                pressure: 0,
-                sea_level: 0,
-                grnd_level: 0,
-                humidity: 0,
+                temp_min,
+                temp_max,
+                pressure,
+                sea_level: pressuresea,
+                grnd_level: pressuregrnd,
+                humidity,
             }
 
             const wind: Wind = {
-                speed: 0,
-                deg: 0,
+                speed: windspeed,
+                deg: oldList[i + 4].wind.deg,
             }
 
             const newElement: ForecastListElement = {
-                dt: 0,
+                dt: oldList[i + 4].dt,
                 main: listMain,
-                weather_id: 0,
-                werather_main: "",
-                weather_description: "",
-                weather_icon: "",
-                clouds: 0,
+                weather_id: oldList[i + 4].dt,
+                werather_main: oldList[i + 4].weather[0].main,
+                weather_description: oldList[i + 4].weather[0].description,
+                weather_icon: oldList[i + 4].weather[0].icon,
+                clouds,
                 wind,
-                dt_txt: "string",
+                dt_txt: oldList[i + 4].dt_txt,
                 rain: 0,
                 snow: 0,
             }
@@ -197,6 +213,7 @@ export class ForecastReceiver implements IForecastReceiver {
 
         }
         aggrForecastJson.list = newList
+        console.log(JSON.stringify(aggrForecastJson))
         return aggrForecastJson
     }
 

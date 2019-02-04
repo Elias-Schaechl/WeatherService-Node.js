@@ -138,49 +138,66 @@ class ForecastReceiver {
         const newList = [];
         for (let i = scipCnt; i < oldList.length - 8; i += 8) {
             let temp = 0;
-            let mintemp;
-            let maxtemp;
-            const pressure = 0;
-            const pressuregrnd = 0;
-            const pressuresea = 0;
-            const humidity = 0;
-            const clouds = 0;
-            const windspeed = 0;
-            const winddeg = 0;
-            const rain = 0;
-            const snow = 0;
+            let temp_min = 100;
+            let temp_max = -100;
+            let pressure = 0;
+            let pressuregrnd = 0;
+            let pressuresea = 0;
+            let humidity = 0;
+            let clouds = 0;
+            let windspeed = 0;
+            let winddeg = 0;
+            let rain = 0;
+            let snow = 0;
             for (let j = i; j < i + 8; j++) {
-                temp += oldList[i].main.temp / 8;
+                const weatherListElement = oldList[j];
+                const weatherMain = weatherListElement.main;
+                temp += (weatherMain.temp / 8);
+                pressure += (weatherMain.pressure / 8);
+                pressuregrnd += (weatherMain.grnd_level / 8);
+                pressuresea += (weatherMain.sea_level / 8);
+                humidity += (weatherMain.humidity / 8);
+                windspeed += (weatherListElement.wind.speed / 8);
+                clouds += (weatherListElement.clouds.all / 8);
+                if (temp_min > weatherMain.temp_min) {
+                    temp_min = weatherMain.temp_min;
+                }
+                if (temp_max < weatherMain.temp_max) {
+                    temp_max = weatherMain.temp_max;
+                }
+                //console.log("LoopLog: " + temp)
+                //console.log(oldList[i].main.temp)
             }
             const listMain = {
                 temp,
-                temp_min: 0,
-                temp_max: 0,
-                pressure: 0,
-                sea_level: 0,
-                grnd_level: 0,
-                humidity: 0,
+                temp_min,
+                temp_max,
+                pressure,
+                sea_level: pressuresea,
+                grnd_level: pressuregrnd,
+                humidity,
             };
             const wind = {
-                speed: 0,
-                deg: 0,
+                speed: windspeed,
+                deg: oldList[i + 4].wind.deg,
             };
             const newElement = {
-                dt: 0,
+                dt: oldList[i + 4].dt,
                 main: listMain,
-                weather_id: 0,
-                werather_main: "",
-                weather_description: "",
-                weather_icon: "",
-                clouds: 0,
+                weather_id: oldList[i + 4].dt,
+                werather_main: oldList[i + 4].weather[0].main,
+                weather_description: oldList[i + 4].weather[0].description,
+                weather_icon: oldList[i + 4].weather[0].icon,
+                clouds,
                 wind,
-                dt_txt: "string",
+                dt_txt: oldList[i + 4].dt_txt,
                 rain: 0,
                 snow: 0,
             };
             newList.push(newElement);
         }
         aggrForecastJson.list = newList;
+        console.log(JSON.stringify(aggrForecastJson));
         return aggrForecastJson;
     }
     /**

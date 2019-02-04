@@ -60,7 +60,9 @@ function getWeather(weather: Weather): boolean {
 
 function getForecast(forecast: ForecastJson, aggregatedforecast: AggrForecastJson): boolean {
     console.log(`Forecast arrived: ${JSON.stringify(forecast).substring(0, 40)}...`)
+    //console.log(`Aggregated forecast arrived: ${JSON.stringify(aggregatedforecast)}...`)
     mqttClient.send(forecasttopicfull, JSON.stringify(forecast))
+    mqttClient.send(forecasttopicaggregated, JSON.stringify(aggregatedforecast))
     return true
 }
 
