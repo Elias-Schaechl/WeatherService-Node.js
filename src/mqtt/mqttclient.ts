@@ -1,6 +1,11 @@
 import * as mqtt from "mqtt"
 import { Confighandler } from "./../config/config"
 
+interface Subscription{
+    topic: string,
+    onMessage(topic: string, message: string): void
+}
+
 export class MqttClient {
 
     public static get Instance() {
@@ -9,7 +14,8 @@ export class MqttClient {
 
     private static instance: MqttClient
 
-    public subscriptions = new Set()
+    public subscriptions: Subscription[] = []
+    public connected: boolean = false
     private handler: Confighandler = Confighandler.Instance
     private readonly url: string = this.handler.config.mqttclient.url
     private readonly port: string = this.handler.config.mqttclient.port
@@ -33,8 +39,10 @@ export class MqttClient {
     }
 
     public subscribe(topic: string, target: (topic: string, message: string) => void) {
-        this.client.subscribe(topic)
-        this.subscriptions.add({"topic": topic, "onMessage": target})
+        if (this.connected) {
+            this.client.subscribe(topic)
+        }
+        this.subscriptions.push({"topic": topic, "onMessage": target})
         // console.log (this.subscriptions)
 
     }
@@ -45,6 +53,11 @@ export class MqttClient {
 
     private onConnect() {
         console.log(`MQTT connection established`)
+        this.connected = true
+        // console.log(this.subscriptions)
+        // this.subscriptions.forEach((subscription) => {
+        //     this.client.subscribe(subscription.topic)
+        // })
     }
 
     private onMessage(topic: string, message: string): void {

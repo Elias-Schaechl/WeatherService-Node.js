@@ -1,3 +1,5 @@
+import { isNullOrUndefined } from "util";
+
 export class Weather {
 
     public changed: boolean[] = Array(5).fill(true)
@@ -8,12 +10,17 @@ export class Weather {
         public pressure: number,
         public humidity: number,
         public windspeed: number,
-        public winddir: number) {
+        public winddir: number,
+        inkm?: boolean) {
 
         this.temperature = temperature
         this.pressure = pressure
         this.humidity = humidity
-        this.windspeed = Math.round(windspeed * 3.6 * 10) / 10
+        if ( !isNullOrUndefined(inkm) && inkm) {
+            this.windspeed = windspeed
+        } else {
+            this.windspeed = Math.round(windspeed * 3.6 * 10) / 10
+        }
         this.winddir = winddir
     }
 

@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const util_1 = require("util");
 class Weather {
-    constructor(timestamp, temperature, pressure, humidity, windspeed, winddir) {
+    constructor(timestamp, temperature, pressure, humidity, windspeed, winddir, inkm) {
         this.timestamp = timestamp;
         this.temperature = temperature;
         this.pressure = pressure;
@@ -12,7 +13,12 @@ class Weather {
         this.temperature = temperature;
         this.pressure = pressure;
         this.humidity = humidity;
-        this.windspeed = Math.round(windspeed * 3.6 * 10) / 10;
+        if (!util_1.isNullOrUndefined(inkm) && inkm) {
+            this.windspeed = windspeed;
+        }
+        else {
+            this.windspeed = Math.round(windspeed * 3.6 * 10) / 10;
+        }
         this.winddir = winddir;
     }
     Equals(other) {

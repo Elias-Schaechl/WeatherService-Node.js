@@ -156,7 +156,6 @@ export class ForecastReceiver implements IForecastReceiver {
             let humidity: number = 0
             let clouds: number = 0
             let windspeed: number = 0
-            let winddeg: number = 0
             let rain: number = 0
             let snow: number = 0
 
@@ -176,6 +175,8 @@ export class ForecastReceiver implements IForecastReceiver {
                 if (temp_max < weatherMain.temp_max) {
                     temp_max = weatherMain.temp_max
                 }
+                //rain += weatherListElement.rain[""]
+
                 //console.log("LoopLog: " + temp)
                 //console.log(oldList[i].main.temp)
 
@@ -206,14 +207,15 @@ export class ForecastReceiver implements IForecastReceiver {
                 clouds,
                 wind,
                 dt_txt: oldList[i + 4].dt_txt,
-                rain: 0,
-                snow: 0,
+                rain,
+                snow,
             }
             newList.push(newElement)
 
         }
         aggrForecastJson.list = newList
-        console.log(JSON.stringify(aggrForecastJson))
+        // console.log(JSON.parse(JSON.stringify(oldList)))
+        // console.log(JSON.parse(JSON.stringify(aggrForecastJson)))
         return aggrForecastJson
     }
 

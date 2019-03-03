@@ -8,7 +8,8 @@ export class Confighandler {
 
     private static _instance: Confighandler
     public readonly config: ConfigJson
-    private path: string = "config-localtest.json"
+    private path: string = "config-vm61.json"
+    // private path: string = "config-localtest.json"
 
     private constructor() {
         console.log("Confighandler constructor()...")

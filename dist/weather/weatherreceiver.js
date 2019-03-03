@@ -31,7 +31,7 @@ class WeatherReceiver {
         this.mqttClient = mqttClient;
         this.cycleDuration = -1;
         this.sendWeather = this.dummyFunc;
-        // this.makeSubscriptions()
+        //this.makeSubscriptions()
     }
     /**
      * Sets a new intervall for requests
@@ -95,6 +95,7 @@ class WeatherReceiver {
     }
     onNewTemperature(topic, message) {
         if (this.lastWeather.temperature !== +message) {
+            console.log(topic + " : " + message);
             this.lastWeather.temperature = +message;
             this.lastWeather.changed[0] = true;
             this.sendWeather(this.lastWeather);
